@@ -235,15 +235,10 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
                 
             } completed:^(UIImage *image,NSData *imageData,NSError *error,NSURL *url){
                 if(!error){
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wdeprecated-declarations"
-                    if ([weakSelf.delegate respondsToSelector:@selector(mbLaunchAd:imageDownLoadFinish:)]) {
-                        [weakSelf.delegate mbLaunchAd:self imageDownLoadFinish:image];
-                    }
-#pragma clang diagnostic pop
                     if ([weakSelf.delegate respondsToSelector:@selector(mbLaunchAd:imageDownLoadFinish:imageData:)]) {
                         [weakSelf.delegate mbLaunchAd:self imageDownLoadFinish:image imageData:imageData];
                     }
+
                 }
             }];
             if(configuration.imageOption == MBLaunchAdImageCacheInBackground){
@@ -272,12 +267,10 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
                 adImageView.animatedImage = nil;
                 adImageView.image = [UIImage imageWithData:data];
             }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wdeprecated-declarations"
-            if ([self.delegate respondsToSelector:@selector(mbLaunchAd:imageDownLoadFinish:)]) {
-                [self.delegate mbLaunchAd:self imageDownLoadFinish:[UIImage imageWithData:data]];
+            if ([self.delegate respondsToSelector:@selector(mbLaunchAd:imageDownLoadFinish:imageData:)]) {
+                [self.delegate mbLaunchAd:self imageDownLoadFinish:[UIImage imageWithData:data] imageData:data];
             }
-#pragma clang diagnostic pop
+
         }else{
             MBLaunchAdLog(@"未设置广告图片");
         }
@@ -447,21 +440,6 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 -(void)clickAndPoint:(CGPoint)point{
     self.clickPoint = point;
     MBLaunchAdConfiguration * configuration = [self commonConfiguration];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickAndOpenURLString:)]) {
-        [self.delegate mbLaunchAd:self clickAndOpenURLString:configuration.openURLString];
-        [self removeAndAnimateDefault];
-    }
-    if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickAndOpenURLString:clickPoint:)]) {
-        [self.delegate mbLaunchAd:self clickAndOpenURLString:configuration.openURLString clickPoint:point];
-        [self removeAndAnimateDefault];
-    }
-    if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickAndOpenModel:clickPoint:)]) {
-        [self.delegate mbLaunchAd:self clickAndOpenModel:configuration.openModel clickPoint:point];
-        [self removeAndAnimateDefault];
-    }
-#pragma clang diagnostic pop
     if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickAtOpenModel:clickPoint:)]) {
         BOOL status =  [self.delegate mbLaunchAd:self clickAtOpenModel:configuration.openModel clickPoint:point];
         if(status) [self removeAndAnimateDefault];
@@ -533,15 +511,10 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
                 if (configuration.autoDismiss) {
                     [strongSelf removeAndAnimate];
                 } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wdeprecated-declarations"
-                    if ([strongSelf.delegate respondsToSelector:@selector(MBLaunchShowFinish:)]) {
-                        [strongSelf.delegate MBLaunchShowFinish:strongSelf];
-                    }
-#pragma clang diagnostic pop
                     if ([strongSelf.delegate respondsToSelector:@selector(MBLaunchAdShowFinish:)]) {
                         [strongSelf.delegate MBLaunchAdShowFinish:strongSelf];
                     }
+
                 }
                 
                 return ;
@@ -650,15 +623,10 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 
 -(void)remove{
     [self removeOnly];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(MBLaunchShowFinish:)]) {
-        [self.delegate MBLaunchShowFinish:self];
-    }
-#pragma clang diagnostic pop
     if ([self.delegate respondsToSelector:@selector(MBLaunchAdShowFinish:)]) {
         [self.delegate MBLaunchAdShowFinish:self];
     }
+
 }
 
 -(void)removeSubViewsExceptLaunchAdImageView{
