@@ -30,7 +30,7 @@ TODO: Add long description of the pod here.
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
-  s.source_files = 'KKLaunchAd/KKLaunchAd/**/*.{h,m}' 
+  s.source_files = 'MBLaunchAd/MBLaunchAd/**/*.{h,m}' 
   
   # s.public_header_files = 'Fireable/CleanAbroadPublic.framework/**/*.h'
   s.requires_arc = true
