@@ -2,13 +2,13 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "KKLaunchAdConfiguration.h"
-#import "KKLaunchAdConst.h"
-#import "KKLaunchImageView.h"
+#import "MBLaunchAdConfiguration.h"
+#import "MBLaunchAdConst.h"
+#import "MBLaunchImageView.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@class KKLaunchAd;
-@protocol KKLaunchAdDelegate <NSObject>
+@class MBLaunchAd;
+@protocol MBLaunchAdDelegate <NSObject>
 @optional
 
 /**
@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @param clickPoint 点击位置
 @param return  YES移除广告,NO不移除
 */
-- (BOOL)KKLaunchAd:(KKLaunchAd *)launchAd clickAtOpenModel:(id)openModel clickPoint:(CGPoint)clickPoint;
+- (BOOL)mbLaunchAd:(MBLaunchAd *)launchAd clickAtOpenModel:(id)openModel clickPoint:(CGPoint)clickPoint;
 
 /**
  跳过按钮点击回调(注意:自定义跳过按钮不会走此回调)
@@ -27,72 +27,64 @@ NS_ASSUME_NONNULL_BEGIN
  @param launchAd launchAd
  @param skipButton 跳过按钮
  */
-- (void)KKLaunchAd:(KKLaunchAd *)launchAd clickSkipButton:(UIButton *)skipButton;
+- (void)mbLaunchAd:(MBLaunchAd *)launchAd clickSkipButton:(UIButton *)skipButton;
 
 /**
  *  图片本地读取/或下载完成回调
  *
- *  @param launchAd  KKLaunchAd
+ *  @param launchAd  MBLaunchAd
  *  @param image 读取/下载的image
  *  @param imageData 读取/下载的imageData
  */
--(void)KKLaunchAd:(KKLaunchAd *)launchAd imageDownLoadFinish:(UIImage *)image imageData:(NSData *)imageData;
+-(void)mbLaunchAd:(MBLaunchAd *)launchAd imageDownLoadFinish:(UIImage *)image imageData:(NSData *)imageData;
 
 /**
  *  video本地读取/或下载完成回调
  *
- *  @param launchAd KKLaunchAd
+ *  @param launchAd MBLaunchAd
  *  @param pathURL  本地保存路径
  */
--(void)KKLaunchAd:(KKLaunchAd *)launchAd videoDownLoadFinish:(NSURL *)pathURL;
+-(void)mbLaunchAd:(MBLaunchAd *)launchAd videoDownLoadFinish:(NSURL *)pathURL;
 
 /**
  视频下载进度回调
 
- @param launchAd KKLaunchAd
+ @param launchAd MBLaunchAd
  @param progress 下载进度
  @param total    总大小
  @param current  当前已下载大小
  */
--(void)KKLaunchAd:(KKLaunchAd *)launchAd videoDownLoadProgress:(float)progress total:(unsigned long long)total current:(unsigned long long)current;
+-(void)mbLaunchAd:(MBLaunchAd *)launchAd videoDownLoadProgress:(float)progress total:(unsigned long long)total current:(unsigned long long)current;
 
 /**
  *  倒计时回调
  *
- *  @param launchAd KKLaunchAd
+ *  @param launchAd MBLaunchAd
  *  @param duration 倒计时时间
  */
--(void)KKLaunchAd:(KKLaunchAd *)launchAd customSkipView:(UIView *)customSkipView duration:(NSInteger)duration;
+-(void)mbLaunchAd:(MBLaunchAd *)launchAd customSkipView:(UIView *)customSkipView duration:(NSInteger)duration;
 
 /**
   广告显示完成
 
- @param launchAd KKLaunchAd
+ @param launchAd MBLaunchAd
  */
--(void)KKLaunchAdShowFinish:(KKLaunchAd *)launchAd;
+-(void)MBLaunchAdShowFinish:(MBLaunchAd *)launchAd;
 
 /**
- 如果你想用SDWebImage等框架加载网络广告图片,请实现此代理,注意:实现此方法后,图片缓存将不受KKLaunchAd管理
+ 如果你想用SDWebImage等框架加载网络广告图片,请实现此代理,注意:实现此方法后,图片缓存将不受MBLaunchAd管理
 
- @param launchAd          KKLaunchAd
+ @param launchAd          MBLaunchAd
  @param launchAdImageView launchAdImageView
  @param url               图片url
  */
--(void)KKLaunchAd:(KKLaunchAd *)launchAd launchAdImageView:(UIImageView *)launchAdImageView URL:(NSURL *)url;
-
-
-#pragma mark - 过期-KKLaunchAdDelegate
-- (void)KKLaunchAd:(KKLaunchAd *)launchAd clickAndOpenModel:(id)openModel clickPoint:(CGPoint)clickPoint KKLaunchAdDeprecated("请使用KKLaunchAd:clickAtOpenModel:clickPoint:");
-- (void)KKLaunchAd:(KKLaunchAd *)launchAd clickAndOpenURLString:(NSString *)openURLString KKLaunchAdDeprecated("请使用KKLaunchAd:clickAtOpenModel:clickPoint:");
-- (void)KKLaunchAd:(KKLaunchAd *)launchAd clickAndOpenURLString:(NSString *)openURLString clickPoint:(CGPoint)clickPoint KKLaunchAdDeprecated("请使用KKLaunchAd:clickAtOpenModel:clickPoint:");
--(void)KKLaunchAd:(KKLaunchAd *)launchAd imageDownLoadFinish:(UIImage *)image KKLaunchAdDeprecated("请使用KKLaunchAd:imageDownLoadFinish:imageData:");
--(void)KKLaunchShowFinish:(KKLaunchAd *)launchAd KKLaunchAdDeprecated("请使用KKLaunchAdShowFinish:");
+-(void)mbLaunchAd:(MBLaunchAd *)launchAd launchAdImageView:(UIImageView *)launchAdImageView URL:(NSURL *)url;
 
 @end
 
-@interface KKLaunchAd : NSObject
+@interface MBLaunchAd : NSObject
 
-@property(nonatomic,assign) id<KKLaunchAdDelegate> delegate;
+@property(nonatomic,assign) id<MBLaunchAdDelegate> delegate;
 
 /**
  设置你工程的启动页使用的是LaunchImage还是LaunchScreen(default:SourceTypeLaunchImage)
@@ -113,9 +105,9 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param imageAdconfiguration 数据配置
  *
- *  @return KKLaunchAd
+ *  @return MBLaunchAd
  */
-+(KKLaunchAd *)imageAdWithImageAdConfiguration:(KKLaunchImageAdConfiguration *)imageAdconfiguration;
++(MBLaunchAd *)imageAdWithImageAdConfiguration:(MBLaunchImageAdConfiguration *)imageAdconfiguration;
 
 /**
  *  图片开屏广告数据配置
@@ -123,18 +115,18 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param imageAdconfiguration 数据配置
  *  @param delegate             delegate
  *
- *  @return KKLaunchAd
+ *  @return MBLaunchAd
  */
-+(KKLaunchAd *)imageAdWithImageAdConfiguration:(KKLaunchImageAdConfiguration *)imageAdconfiguration delegate:(nullable id)delegate;
++(MBLaunchAd *)imageAdWithImageAdConfiguration:(MBLaunchImageAdConfiguration *)imageAdconfiguration delegate:(nullable id)delegate;
 
 /**
  *  视频开屏广告数据配置
  *
  *  @param videoAdconfiguration 数据配置
  *
- *  @return KKLaunchAd
+ *  @return MBLaunchAd
  */
-+(KKLaunchAd *)videoAdWithVideoAdConfiguration:(KKLaunchVideoAdConfiguration *)videoAdconfiguration;
++(MBLaunchAd *)videoAdWithVideoAdConfiguration:(MBLaunchVideoAdConfiguration *)videoAdconfiguration;
 
 /**
  *  视频开屏广告数据配置
@@ -142,9 +134,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param videoAdconfiguration 数据配置
  *  @param delegate             delegate
  *
- *  @return KKLaunchAd
+ *  @return MBLaunchAd
  */
-+(KKLaunchAd *)videoAdWithVideoAdConfiguration:(KKLaunchVideoAdConfiguration *)videoAdconfiguration delegate:(nullable id)delegate;
++(MBLaunchAd *)videoAdWithVideoAdConfiguration:(MBLaunchVideoAdConfiguration *)videoAdconfiguration delegate:(nullable id)delegate;
 
 #pragma mark -批量下载并缓存
 /**
@@ -160,7 +152,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param urlArray image URL Array
  @param completedBlock 回调结果为一个字典数组,url:图片的url字符串,result:0表示该图片下载缓存失败,1表示该图片下载并缓存完成或本地缓存中已有该图片
  */
-+(void)downLoadImageAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray completed:(nullable KKLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock;
++(void)downLoadImageAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray completed:(nullable MBLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock;
 
 /**
  *  批量下载并缓存视频(异步) - 已缓存的视频不会再次下载缓存
@@ -175,7 +167,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param urlArray 视频URL Array
  @param completedBlock 回调结果为一个字典数组,url:视频的url字符串,result:0表示该视频下载缓存失败,1表示该视频下载并缓存完成或本地缓存中已有该视频
  */
-+(void)downLoadVideoAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray completed:(nullable KKLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock;
++(void)downLoadVideoAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray completed:(nullable MBLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock;
 
 #pragma mark - Action
 
@@ -207,14 +199,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 获取缓存url
 /**
- 从缓存中获取上一次的ImageURLString(KKLaunchAd 会默认缓存imageURLString)
+ 从缓存中获取上一次的ImageURLString(MBLaunchAd 会默认缓存imageURLString)
  
  @return imageUrlString
  */
 +(NSString *)cacheImageURLString;
 
 /**
- 从缓存中获取上一次的videoURLString(KKLaunchAd 会默认缓存VideoURLString)
+ 从缓存中获取上一次的videoURLString(MBLaunchAd 会默认缓存VideoURLString)
  
  @return videoUrlString
  */
@@ -222,7 +214,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 缓存/清理相关
 /**
- *  清除KKLaunchAd本地所有缓存(异步)
+ *  清除MBLaunchAd本地所有缓存(异步)
  */
 +(void)clearDiskCache;
 
@@ -255,18 +247,14 @@ NS_ASSUME_NONNULL_BEGIN
 +(void)clearDiskCacheExceptVideoUrlArray:(NSArray<NSURL *> *)exceptVideoUrlArray;
 
 /**
- *  获取KKLaunch本地缓存大小(M)
+ *  获取MBLaunch本地缓存大小(M)
  */
 +(float)diskCacheSize;
 
 /**
  *  缓存路径
  */
-+(NSString *)KKLaunchAdCachePath;
-
-#pragma mark - 过期
-+(void)skipAction KKLaunchAdDeprecated("请使用removeAndAnimated:");
-+(void)setLaunchImagesSource:(LaunchImagesSource)launchImagesSource KKLaunchAdDeprecated("请使用setLaunchSourceType:");
++(NSString *)MBLaunchAdCachePath;
 
 @end
 NS_ASSUME_NONNULL_END

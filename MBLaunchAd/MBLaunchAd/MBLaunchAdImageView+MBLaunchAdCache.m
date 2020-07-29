@@ -1,7 +1,7 @@
 
 
-#import "KKLaunchAdImageView+KKLaunchAdCache.h"
-#import "KKLaunchAdConst.h"
+#import "MBLaunchAdImageView+MBLaunchAdCache.h"
+#import "MBLaunchAdConst.h"
 
 #if __has_include(<FLAnimatedImage/FLAnimatedImage.h>)
     #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -9,16 +9,16 @@
     #import "FLAnimatedImage.h"
 #endif
 
-@implementation KKLaunchAdImageView (KKLaunchAdCache)
+@implementation MBLaunchAdImageView (MBLaunchAdCache)
 - (void)xh_setImageWithURL:(nonnull NSURL *)url{
     [self xh_setImageWithURL:url placeholderImage:nil];
 }
 
 - (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder{
-    [self xh_setImageWithURL:url placeholderImage:placeholder options:KKLaunchAdImageDefault];
+    [self xh_setImageWithURL:url placeholderImage:placeholder options:MBLaunchAdImageDefault];
 }
 
--(void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(KKLaunchAdImageOptions)options{
+-(void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(MBLaunchAdImageOptions)options{
     [self xh_setImageWithURL:url placeholderImage:placeholder options:options completed:nil];
 }
 
@@ -28,18 +28,18 @@
 }
 
 - (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder completed:(nullable XHExternalCompletionBlock)completedBlock{
-    [self xh_setImageWithURL:url placeholderImage:placeholder options:KKLaunchAdImageDefault completed:completedBlock];
+    [self xh_setImageWithURL:url placeholderImage:placeholder options:MBLaunchAdImageDefault completed:completedBlock];
 }
 
--(void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(KKLaunchAdImageOptions)options completed:(nullable XHExternalCompletionBlock)completedBlock{
+-(void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(MBLaunchAdImageOptions)options completed:(nullable XHExternalCompletionBlock)completedBlock{
     [self xh_setImageWithURL:url placeholderImage:placeholder GIFImageCycleOnce:NO options:options GIFImageCycleOnceFinish:nil completed:completedBlock ];
 }
 
-- (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder GIFImageCycleOnce:(BOOL)GIFImageCycleOnce options:(KKLaunchAdImageOptions)options GIFImageCycleOnceFinish:(void(^_Nullable)(void))cycleOnceFinishBlock completed:(nullable XHExternalCompletionBlock)completedBlock {
+- (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder GIFImageCycleOnce:(BOOL)GIFImageCycleOnce options:(MBLaunchAdImageOptions)options GIFImageCycleOnceFinish:(void(^_Nullable)(void))cycleOnceFinishBlock completed:(nullable XHExternalCompletionBlock)completedBlock {
     if(placeholder) self.image = placeholder;
     if(!url) return;
     XHWeakSelf
-    [[KKLaunchAdImageManager sharedManager] loadImageWithURL:url options:options progress:nil completed:^(UIImage * _Nullable image,  NSData *_Nullable imageData, NSError * _Nullable error, NSURL * _Nullable imageURL) {
+    [[MBLaunchAdImageManager sharedManager] loadImageWithURL:url options:options progress:nil completed:^(UIImage * _Nullable image,  NSData *_Nullable imageData, NSError * _Nullable error, NSURL * _Nullable imageURL) {
         if(!error){
             if(XHISGIFTypeWithData(imageData)){
                 weakSelf.image = nil;
@@ -47,7 +47,7 @@
                 weakSelf.loopCompletionBlock = ^(NSUInteger loopCountRemaining) {
                     if(GIFImageCycleOnce){
                        [weakSelf stopAnimating];
-                        KKLaunchAdLog(@"GIF不循环,播放完成");
+                        MBLaunchAdLog(@"GIF不循环,播放完成");
                         if(cycleOnceFinishBlock) cycleOnceFinishBlock();
                     }
                 };

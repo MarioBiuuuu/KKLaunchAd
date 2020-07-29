@@ -1,14 +1,14 @@
 
 
-#import "KKLaunchImageView.h"
-#import "KKLaunchAdConst.h"
+#import "MBLaunchImageView.h"
+#import "MBLaunchAdConst.h"
 
 
-@interface KKLaunchImageView ()
+@interface MBLaunchImageView ()
 
 @end
 
-@implementation KKLaunchImageView
+@implementation MBLaunchImageView
 #pragma mark - private
 - (instancetype)initWithSourceType:(SourceType)sourceType{
     self = [super init];
@@ -37,14 +37,14 @@
     if(imageP) return imageP;
     UIImage *imageL = [self launchImageWithType:@"Landscape"];
     if(imageL)  return imageL;
-    KKLaunchAdLog(@"获取LaunchImage失败!请检查是否添加启动图,或者规格是否有误.");
+    MBLaunchAdLog(@"获取LaunchImage失败!请检查是否添加启动图,或者规格是否有误.");
     return nil;
 }
 
 -(UIImage *)imageFromLaunchScreen{
     NSString *UILaunchStoryboardName = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"UILaunchStoryboardName"];
     if(UILaunchStoryboardName == nil){
-        KKLaunchAdLog(@"从 LaunchScreen 中获取启动图失败!");
+        MBLaunchAdLog(@"从 LaunchScreen 中获取启动图失败!");
         return nil;
     }
     UIViewController *LaunchScreenSb = [[UIStoryboard storyboardWithName:UILaunchStoryboardName bundle:nil] instantiateInitialViewController];
@@ -59,12 +59,12 @@
         containerWindow = nil;
         return image;
     }
-    KKLaunchAdLog(@"从 LaunchScreen 中获取启动图失败!");
+    MBLaunchAdLog(@"从 LaunchScreen 中获取启动图失败!");
     return nil;
 }
 
 -(UIImage*)imageFromView:(UIView*)view{
-    //fix bug:https://github.com/CoderZhuXH/KKLaunchAd/issues/203
+    //fix bug:https://github.com/CoderZhuXH/MBLaunchAd/issues/203
     if (CGRectIsEmpty(view.frame)) {
         return nil;
     }
@@ -83,7 +83,7 @@
 
 
 -(UIImage *)launchImageWithType:(NSString *)type{
-    //比对分辨率,获取启动图 fix #158:https://github.com/CoderZhuXH/KKLaunchAd/issues/158
+    //比对分辨率,获取启动图 fix #158:https://github.com/CoderZhuXH/MBLaunchAd/issues/158
     CGFloat screenScale = [UIScreen mainScreen].scale;
     CGSize screenDipSize = CGSizeMake([UIScreen mainScreen].bounds.size.width * screenScale, [UIScreen mainScreen].bounds.size.height * screenScale);
     NSString *viewOrientation = type;

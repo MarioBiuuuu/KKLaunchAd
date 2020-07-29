@@ -19,14 +19,14 @@
 
 
 #pragma mark - image
-@interface KKLaunchAdImageView : FLAnimatedImageView
+@interface MBLaunchAdImageView : FLAnimatedImageView
 
 @property (nonatomic, copy) void(^click)(CGPoint point);
 
 @end
 
 #pragma mark - video
-@interface KKLaunchAdVideoView : UIView
+@interface MBLaunchAdVideoView : UIView
 
 @property (nonatomic, copy) void(^click)(CGPoint point);
 @property (nonatomic, strong) AVPlayerViewController *videoPlayer;

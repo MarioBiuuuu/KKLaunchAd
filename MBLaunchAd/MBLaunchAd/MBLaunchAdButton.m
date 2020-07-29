@@ -1,7 +1,7 @@
 
 
-#import "KKLaunchAdButton.h"
-#import "KKLaunchAdConst.h"
+#import "MBLaunchAdButton.h"
+#import "MBLaunchAdConst.h"
 
 /** Progress颜色 */
 #define RoundProgressColor  [UIColor whiteColor]
@@ -14,7 +14,7 @@
 /** 倒计时单位 */
 #define DurationUnit @"S"
 
-@interface KKLaunchAdButton()
+@interface MBLaunchAdButton()
 @property(nonatomic,assign)SkipType skipType;
 @property(nonatomic,assign)CGFloat leftRightSpace;
 @property(nonatomic,assign)CGFloat topBottomSpace;
@@ -23,7 +23,7 @@
 @property(nonatomic,copy)dispatch_source_t roundTimer;
 @end
 
-@implementation KKLaunchAdButton
+@implementation MBLaunchAdButton
 
 - (instancetype)initWithSkipType:(SkipType)skipType{
     self = [super init];

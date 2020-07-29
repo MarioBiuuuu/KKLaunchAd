@@ -1,9 +1,9 @@
 
-#import "KKLaunchAdCache.h"
+#import "MBLaunchAdCache.h"
 #import <CommonCrypto/CommonDigest.h>
-#import "KKLaunchAdConst.h"
+#import "MBLaunchAdConst.h"
 
-@implementation KKLaunchAdCache
+@implementation MBLaunchAdCache
 
 +(UIImage *)getCacheImageWithURL:(NSURL *)url{
     if(url==nil) return nil;
@@ -17,10 +17,10 @@
 }
 
 +(BOOL)saveImageData:(NSData *)data imageURL:(NSURL *)url{
-    NSString *path = [NSString stringWithFormat:@"%@/%@",[self KKLaunchAdCachePath],[self keyWithURL:url]];
+    NSString *path = [NSString stringWithFormat:@"%@/%@",[self MBLaunchAdCachePath],[self keyWithURL:url]];
     if (data) {
         BOOL result = [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
-        if (!result) KKLaunchAdLog(@"cache file error for URL: %@", url);
+        if (!result) MBLaunchAdLog(@"cache file error for URL: %@", url);
         return result;
     }
     return NO;
@@ -36,10 +36,10 @@
 }
 
 +(BOOL)saveVideoAtLocation:(NSURL *)location URL:(NSURL *)url{
-    NSString *savePath = [[self KKLaunchAdCachePath] stringByAppendingPathComponent:[self videoNameWithURL:url]];
+    NSString *savePath = [[self MBLaunchAdCachePath] stringByAppendingPathComponent:[self videoNameWithURL:url]];
     NSURL *savePathUrl = [NSURL fileURLWithPath:savePath];
     BOOL result =[[NSFileManager defaultManager] moveItemAtURL:location toURL:savePathUrl error:nil];
-    if(!result) KKLaunchAdLog(@"cache file error for URL: %@", url);
+    if(!result) MBLaunchAdLog(@"cache file error for URL: %@", url);
     return  result;
 }
 
@@ -53,7 +53,7 @@
 }
 
 +(nullable NSURL *)getCacheVideoWithURL:(NSURL *)url{
-    NSString *savePath = [[self KKLaunchAdCachePath] stringByAppendingPathComponent:[self videoNameWithURL:url]];
+    NSString *savePath = [[self MBLaunchAdCachePath] stringByAppendingPathComponent:[self videoNameWithURL:url]];
     //如果存在
     if([[NSFileManager defaultManager] fileExistsAtPath:savePath]){
         return [NSURL fileURLWithPath:savePath];
@@ -61,25 +61,25 @@
     return nil;
 }
 
-+ (NSString *)KKLaunchAdCachePath{
-    NSString *path =[NSHomeDirectory() stringByAppendingPathComponent:@"Library/KKLaunchAdCache"];
++ (NSString *)MBLaunchAdCachePath{
+    NSString *path =[NSHomeDirectory() stringByAppendingPathComponent:@"Library/MBLaunchAdCache"];
     [self checkDirectory:path];
     return path;
 }
 
 +(NSString *)imagePathWithURL:(NSURL *)url{
     if(url==nil) return nil;
-    return [[self KKLaunchAdCachePath] stringByAppendingPathComponent:[self keyWithURL:url]];
+    return [[self MBLaunchAdCachePath] stringByAppendingPathComponent:[self keyWithURL:url]];
 }
 
 +(NSString *)videoPathWithURL:(NSURL *)url{
     if(url==nil) return nil;
-    return [[self KKLaunchAdCachePath] stringByAppendingPathComponent:[self videoNameWithURL:url]];
+    return [[self MBLaunchAdCachePath] stringByAppendingPathComponent:[self videoNameWithURL:url]];
 }
 
 +(NSString *)videoPathWithFileName:(NSString *)videoFileName{
     if(videoFileName.length==0) return nil;
-    return [[self KKLaunchAdCachePath] stringByAppendingPathComponent:[self videoNameWithURL:[NSURL URLWithString:videoFileName]]];
+    return [[self MBLaunchAdCachePath] stringByAppendingPathComponent:[self videoNameWithURL:[NSURL URLWithString:videoFileName]]];
 }
 
 
@@ -138,9 +138,9 @@
 +(void)clearDiskCache{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *path = [self KKLaunchAdCachePath];
+        NSString *path = [self MBLaunchAdCachePath];
         [fileManager removeItemAtPath:path error:nil];
-        [self checkDirectory:[self KKLaunchAdCachePath]];
+        [self checkDirectory:[self MBLaunchAdCachePath]];
     });
 }
 
@@ -157,14 +157,14 @@
 
 +(void)clearDiskCacheExceptImageUrlArray:(NSArray<NSURL *> *)exceptImageUrlArray{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *allFilePaths = [self allFilePathWithDirectoryPath:[self KKLaunchAdCachePath]];
+        NSArray *allFilePaths = [self allFilePathWithDirectoryPath:[self MBLaunchAdCachePath]];
         NSArray *exceptImagePaths = [self filePathsWithFileUrlArray:exceptImageUrlArray videoType:NO];
         [allFilePaths enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if(![exceptImagePaths containsObject:obj] && !XHISVideoTypeWithPath(obj)){
                 [[NSFileManager defaultManager] removeItemAtPath:obj error:nil];
             }
         }];
-        KKLaunchAdLog(@"allFilePath = %@",allFilePaths);
+        MBLaunchAdLog(@"allFilePath = %@",allFilePaths);
     });
 }
 
@@ -181,19 +181,19 @@
 
 +(void)clearDiskCacheExceptVideoUrlArray:(NSArray<NSURL *> *)exceptVideoUrlArray{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *allFilePaths = [self allFilePathWithDirectoryPath:[self KKLaunchAdCachePath]];
+        NSArray *allFilePaths = [self allFilePathWithDirectoryPath:[self MBLaunchAdCachePath]];
         NSArray *exceptVideoPaths = [self filePathsWithFileUrlArray:exceptVideoUrlArray videoType:YES];
         [allFilePaths enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if(![exceptVideoPaths containsObject:obj] && XHISVideoTypeWithPath(obj)){
                 [[NSFileManager defaultManager] removeItemAtPath:obj error:nil];
             }
         }];
-        KKLaunchAdLog(@"allFilePath = %@",allFilePaths);
+        MBLaunchAdLog(@"allFilePath = %@",allFilePaths);
     });
 }
 
 +(float)diskCacheSize{
-    NSString *directoryPath = [self KKLaunchAdCachePath];
+    NSString *directoryPath = [self MBLaunchAdCachePath];
     BOOL isDir = NO;
     unsigned long long total = 0;
     if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath isDirectory:&isDir]) {
@@ -248,11 +248,11 @@
     __autoreleasing NSError *error = nil;
     [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
     if (error) {
-        KKLaunchAdLog(@"create cache directory failed, error = %@", error);
+        MBLaunchAdLog(@"create cache directory failed, error = %@", error);
     } else {
         [self addDoNotBackupAttribute:path];
     }
-    KKLaunchAdLog(@"KKLaunchAdCachePath = %@",path);
+    MBLaunchAdLog(@"MBLaunchAdCachePath = %@",path);
 }
 
 + (void)addDoNotBackupAttribute:(NSString *)path {
@@ -260,7 +260,7 @@
     NSError *error = nil;
     [url setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
     if (error) {
-        KKLaunchAdLog(@"error to set do not backup attribute, error = %@", error);
+        MBLaunchAdLog(@"error to set do not backup attribute, error = %@", error);
     }
 }
 

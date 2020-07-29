@@ -1,20 +1,20 @@
 
 
-#import "KKLaunchAdImageManager.h"
-#import "KKLaunchAdCache.h"
+#import "MBLaunchAdImageManager.h"
+#import "MBLaunchAdCache.h"
 
-@interface KKLaunchAdImageManager()
+@interface MBLaunchAdImageManager()
 
-@property(nonatomic,strong) KKLaunchAdDownloader *downloader;
+@property(nonatomic,strong) MBLaunchAdDownloader *downloader;
 @end
 
-@implementation KKLaunchAdImageManager
+@implementation MBLaunchAdImageManager
 
 +(nonnull instancetype )sharedManager{
-    static KKLaunchAdImageManager *instance = nil;
+    static MBLaunchAdImageManager *instance = nil;
     static dispatch_once_t oneToken;
     dispatch_once(&oneToken,^{
-        instance = [[KKLaunchAdImageManager alloc] init];
+        instance = [[MBLaunchAdImageManager alloc] init];
         
     });
     return instance;
@@ -23,44 +23,44 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        _downloader = [KKLaunchAdDownloader sharedDownloader];
+        _downloader = [MBLaunchAdDownloader sharedDownloader];
     }
     return self;
 }
 
-- (void)loadImageWithURL:(nullable NSURL *)url options:(KKLaunchAdImageOptions)options progress:(nullable KKLaunchAdDownloadProgressBlock)progressBlock completed:(nullable XHExternalCompletionBlock)completedBlock{
-    if(!options) options = KKLaunchAdImageDefault;
-    if(options & KKLaunchAdImageOnlyLoad){
+- (void)loadImageWithURL:(nullable NSURL *)url options:(MBLaunchAdImageOptions)options progress:(nullable MBLaunchAdDownloadProgressBlock)progressBlock completed:(nullable XHExternalCompletionBlock)completedBlock{
+    if(!options) options = MBLaunchAdImageDefault;
+    if(options & MBLaunchAdImageOnlyLoad){
         [_downloader downloadImageWithURL:url progress:progressBlock completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error) {
             if(completedBlock) completedBlock(image,data,error,url);
         }];
-    }else if (options & KKLaunchAdImageRefreshCached){
-        NSData *imageData = [KKLaunchAdCache getCacheImageDataWithURL:url];
+    }else if (options & MBLaunchAdImageRefreshCached){
+        NSData *imageData = [MBLaunchAdCache getCacheImageDataWithURL:url];
         UIImage *image =  [UIImage imageWithData:imageData];
         if(image && completedBlock) completedBlock(image,imageData,nil,url);
         [_downloader downloadImageWithURL:url progress:progressBlock completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error) {
             if(completedBlock) completedBlock(image,data,error,url);
-            [KKLaunchAdCache async_saveImageData:data imageURL:url completed:nil];
+            [MBLaunchAdCache async_saveImageData:data imageURL:url completed:nil];
         }];
-    }else if (options & KKLaunchAdImageCacheInBackground){
-        NSData *imageData = [KKLaunchAdCache getCacheImageDataWithURL:url];
+    }else if (options & MBLaunchAdImageCacheInBackground){
+        NSData *imageData = [MBLaunchAdCache getCacheImageDataWithURL:url];
         UIImage *image =  [UIImage imageWithData:imageData];
         if(image && completedBlock){
             completedBlock(image,imageData,nil,url);
         }else{
             [_downloader downloadImageWithURL:url progress:progressBlock completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error) {
-                [KKLaunchAdCache async_saveImageData:data imageURL:url completed:nil];
+                [MBLaunchAdCache async_saveImageData:data imageURL:url completed:nil];
             }];
         }
     }else{//default
-        NSData *imageData = [KKLaunchAdCache getCacheImageDataWithURL:url];
+        NSData *imageData = [MBLaunchAdCache getCacheImageDataWithURL:url];
         UIImage *image =  [UIImage imageWithData:imageData];
         if(image && completedBlock){
             completedBlock(image,imageData,nil,url);
         }else{
             [_downloader downloadImageWithURL:url progress:progressBlock completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error) {
                 if(completedBlock) completedBlock(image,data,error,url);
-                [KKLaunchAdCache async_saveImageData:data imageURL:url completed:nil];
+                [MBLaunchAdCache async_saveImageData:data imageURL:url completed:nil];
             }];
         }
     }

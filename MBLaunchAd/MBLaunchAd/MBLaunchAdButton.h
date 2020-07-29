@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger,SkipType) {
     SkipTypeRoundProgressText = 8,//圆形:进度圈+跳过
 };
 
-@interface KKLaunchAdButton : UIButton
+@interface MBLaunchAdButton : UIButton
 
 - (instancetype)initWithSkipType:(SkipType)skipType;
 - (void)startRoundDispathTimerWithDuration:(CGFloat )duration;

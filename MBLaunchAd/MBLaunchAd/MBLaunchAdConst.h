@@ -2,7 +2,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define KKLaunchAdDeprecated(instead) __attribute__((deprecated(instead)))
+#define MBLaunchAdDeprecated(instead) __attribute__((deprecated(instead)))
 
 #define XHWeakSelf __weak typeof(self) weakSelf = self;
 
@@ -19,9 +19,9 @@
 #define XHStringContainsSubString(string,subString)  ([string rangeOfString:subString].location == NSNotFound) ? NO:YES
 
 #ifdef DEBUG
-#define KKLaunchAdLog(FORMAT, ...) fprintf(stderr,"%s:%d\t%s\n",[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
+#define MBLaunchAdLog(FORMAT, ...) fprintf(stderr,"%s:%d\t%s\n",[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
 #else
-#define KKLaunchAdLog(...)
+#define MBLaunchAdLog(...)
 #endif
 
 #define XHISGIFTypeWithData(data)\
@@ -66,16 +66,16 @@ view = nil;\
 UIKIT_EXTERN NSString *const XHCacheImageUrlStringKey;
 UIKIT_EXTERN NSString *const XHCacheVideoUrlStringKey;
 
-UIKIT_EXTERN NSString *const KKLaunchAdWaitDataDurationArriveNotification;
-UIKIT_EXTERN NSString *const KKLaunchAdDetailPageWillShowNotification;
-UIKIT_EXTERN NSString *const KKLaunchAdDetailPageShowFinishNotification;
+UIKIT_EXTERN NSString *const MBLaunchAdWaitDataDurationArriveNotification;
+UIKIT_EXTERN NSString *const MBLaunchAdDetailPageWillShowNotification;
+UIKIT_EXTERN NSString *const MBLaunchAdDetailPageShowFinishNotification;
 /** GIFImageCycleOnce = YES(GIF不循环)时, GIF动图播放完成通知 */
-UIKIT_EXTERN NSString *const KKLaunchAdGIFImageCycleOnceFinishNotification;
+UIKIT_EXTERN NSString *const MBLaunchAdGIFImageCycleOnceFinishNotification;
 /** videoCycleOnce = YES(视频不循环时) ,video播放完成通知 */
-UIKIT_EXTERN NSString *const KKLaunchAdVideoCycleOnceFinishNotification;
+UIKIT_EXTERN NSString *const MBLaunchAdVideoCycleOnceFinishNotification;
 /** 视频播放失败通知 */
-UIKIT_EXTERN NSString *const KKLaunchAdVideoPlayFailedNotification;
-UIKIT_EXTERN BOOL KKLaunchAdPrefersHomeIndicatorAutoHidden;
+UIKIT_EXTERN NSString *const MBLaunchAdVideoPlayFailedNotification;
+UIKIT_EXTERN BOOL MBLaunchAdPrefersHomeIndicatorAutoHidden;
 
 
 

@@ -1,11 +1,11 @@
 
 
-#import "KKLaunchAd.h"
-#import "KKLaunchAdView.h"
-#import "KKLaunchAdImageView+KKLaunchAdCache.h"
-#import "KKLaunchAdDownloader.h"
-#import "KKLaunchAdCache.h"
-#import "KKLaunchAdController.h"
+#import "MBLaunchAd.h"
+#import "MBLaunchAdView.h"
+#import "MBLaunchAdImageView+MBLaunchAdCache.h"
+#import "MBLaunchAdDownloader.h"
+#import "MBLaunchAdCache.h"
+#import "MBLaunchAdController.h"
 
 #if __has_include(<FLAnimatedImage/FLAnimatedImage.h>)
     #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -13,21 +13,21 @@
     #import "FLAnimatedImage.h"
 #endif
 
-typedef NS_ENUM(NSInteger, KKLaunchAdType) {
-    KKLaunchAdTypeImage,
-    KKLaunchAdTypeVideo
+typedef NS_ENUM(NSInteger, MBLaunchAdType) {
+    MBLaunchAdTypeImage,
+    MBLaunchAdTypeVideo
 };
 
 static NSInteger defaultWaitDataDuration = 3;
 static  SourceType _sourceType = SourceTypeLaunchImage;
-@interface KKLaunchAd()
+@interface MBLaunchAd()
 
-@property(nonatomic,assign)KKLaunchAdType launchAdType;
+@property(nonatomic,assign)MBLaunchAdType launchAdType;
 @property(nonatomic,assign)NSInteger waitDataDuration;
-@property(nonatomic,strong)KKLaunchImageAdConfiguration * imageAdConfiguration;
-@property(nonatomic,strong)KKLaunchVideoAdConfiguration * videoAdConfiguration;
-@property(nonatomic,strong)KKLaunchAdButton * skipButton;
-@property(nonatomic,strong)KKLaunchAdVideoView * adVideoView;
+@property(nonatomic,strong)MBLaunchImageAdConfiguration * imageAdConfiguration;
+@property(nonatomic,strong)MBLaunchVideoAdConfiguration * videoAdConfiguration;
+@property(nonatomic,strong)MBLaunchAdButton * skipButton;
+@property(nonatomic,strong)MBLaunchAdVideoView * adVideoView;
 @property(nonatomic,strong)UIWindow * window;
 @property(nonatomic,copy)dispatch_source_t waitDataTimer;
 @property(nonatomic,copy)dispatch_source_t skipTimer;
@@ -35,31 +35,31 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 @property(nonatomic,assign) CGPoint clickPoint;
 @end
 
-@implementation KKLaunchAd
+@implementation MBLaunchAd
 +(void)setLaunchSourceType:(SourceType)sourceType{
     _sourceType = sourceType;
 }
 +(void)setWaitDataDuration:(NSInteger )waitDataDuration{
-    KKLaunchAd *launchAd = [KKLaunchAd shareLaunchAd];
+    MBLaunchAd *launchAd = [MBLaunchAd shareLaunchAd];
     launchAd.waitDataDuration = waitDataDuration;
 }
-+(KKLaunchAd *)imageAdWithImageAdConfiguration:(KKLaunchImageAdConfiguration *)imageAdconfiguration{
-    return [KKLaunchAd imageAdWithImageAdConfiguration:imageAdconfiguration delegate:nil];
++(MBLaunchAd *)imageAdWithImageAdConfiguration:(MBLaunchImageAdConfiguration *)imageAdconfiguration{
+    return [MBLaunchAd imageAdWithImageAdConfiguration:imageAdconfiguration delegate:nil];
 }
 
-+(KKLaunchAd *)imageAdWithImageAdConfiguration:(KKLaunchImageAdConfiguration *)imageAdconfiguration delegate:(id)delegate{
-    KKLaunchAd *launchAd = [KKLaunchAd shareLaunchAd];
++(MBLaunchAd *)imageAdWithImageAdConfiguration:(MBLaunchImageAdConfiguration *)imageAdconfiguration delegate:(id)delegate{
+    MBLaunchAd *launchAd = [MBLaunchAd shareLaunchAd];
     if(delegate) launchAd.delegate = delegate;
     launchAd.imageAdConfiguration = imageAdconfiguration;
     return launchAd;
 }
 
-+(KKLaunchAd *)videoAdWithVideoAdConfiguration:(KKLaunchVideoAdConfiguration *)videoAdconfiguration{
-    return [KKLaunchAd videoAdWithVideoAdConfiguration:videoAdconfiguration delegate:nil];
++(MBLaunchAd *)videoAdWithVideoAdConfiguration:(MBLaunchVideoAdConfiguration *)videoAdconfiguration{
+    return [MBLaunchAd videoAdWithVideoAdConfiguration:videoAdconfiguration delegate:nil];
 }
 
-+(KKLaunchAd *)videoAdWithVideoAdConfiguration:(KKLaunchVideoAdConfiguration *)videoAdconfiguration delegate:(nullable id)delegate{
-    KKLaunchAd *launchAd = [KKLaunchAd shareLaunchAd];
++(MBLaunchAd *)videoAdWithVideoAdConfiguration:(MBLaunchVideoAdConfiguration *)videoAdconfiguration delegate:(nullable id)delegate{
+    MBLaunchAd *launchAd = [MBLaunchAd shareLaunchAd];
     if(delegate) launchAd.delegate = delegate;
     launchAd.videoAdConfiguration = videoAdconfiguration;
     return launchAd;
@@ -69,70 +69,70 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     [self downLoadImageAndCacheWithURLArray:urlArray completed:nil];
 }
 
-+ (void)downLoadImageAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray completed:(nullable KKLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock{
++ (void)downLoadImageAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray completed:(nullable MBLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock{
     if(urlArray.count==0) return;
-    [[KKLaunchAdDownloader sharedDownloader] downLoadImageAndCacheWithURLArray:urlArray completed:completedBlock];
+    [[MBLaunchAdDownloader sharedDownloader] downLoadImageAndCacheWithURLArray:urlArray completed:completedBlock];
 }
 
 +(void)downLoadVideoAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray{
     [self downLoadVideoAndCacheWithURLArray:urlArray completed:nil];
 }
 
-+(void)downLoadVideoAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray completed:(nullable KKLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock{
++(void)downLoadVideoAndCacheWithURLArray:(NSArray <NSURL *> * )urlArray completed:(nullable MBLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock{
     if(urlArray.count==0) return;
-    [[KKLaunchAdDownloader sharedDownloader] downLoadVideoAndCacheWithURLArray:urlArray completed:completedBlock];
+    [[MBLaunchAdDownloader sharedDownloader] downLoadVideoAndCacheWithURLArray:urlArray completed:completedBlock];
 }
 +(void)removeAndAnimated:(BOOL)animated{
-    [[KKLaunchAd shareLaunchAd] removeAndAnimated:animated];
+    [[MBLaunchAd shareLaunchAd] removeAndAnimated:animated];
 }
 
 +(BOOL)checkImageInCacheWithURL:(NSURL *)url{
-    return [KKLaunchAdCache checkImageInCacheWithURL:url];
+    return [MBLaunchAdCache checkImageInCacheWithURL:url];
 }
 
 +(BOOL)checkVideoInCacheWithURL:(NSURL *)url{
-    return [KKLaunchAdCache checkVideoInCacheWithURL:url];
+    return [MBLaunchAdCache checkVideoInCacheWithURL:url];
 }
 +(void)clearDiskCache{
-    [KKLaunchAdCache clearDiskCache];
+    [MBLaunchAdCache clearDiskCache];
 }
 
 +(void)clearDiskCacheWithImageUrlArray:(NSArray<NSURL *> *)imageUrlArray{
-    [KKLaunchAdCache clearDiskCacheWithImageUrlArray:imageUrlArray];
+    [MBLaunchAdCache clearDiskCacheWithImageUrlArray:imageUrlArray];
 }
 
 +(void)clearDiskCacheExceptImageUrlArray:(NSArray<NSURL *> *)exceptImageUrlArray{
-    [KKLaunchAdCache clearDiskCacheExceptImageUrlArray:exceptImageUrlArray];
+    [MBLaunchAdCache clearDiskCacheExceptImageUrlArray:exceptImageUrlArray];
 }
 
 +(void)clearDiskCacheWithVideoUrlArray:(NSArray<NSURL *> *)videoUrlArray{
-    [KKLaunchAdCache clearDiskCacheWithVideoUrlArray:videoUrlArray];
+    [MBLaunchAdCache clearDiskCacheWithVideoUrlArray:videoUrlArray];
 }
 
 +(void)clearDiskCacheExceptVideoUrlArray:(NSArray<NSURL *> *)exceptVideoUrlArray{
-    [KKLaunchAdCache clearDiskCacheExceptVideoUrlArray:exceptVideoUrlArray];
+    [MBLaunchAdCache clearDiskCacheExceptVideoUrlArray:exceptVideoUrlArray];
 }
 
 +(float)diskCacheSize{
-    return [KKLaunchAdCache diskCacheSize];
+    return [MBLaunchAdCache diskCacheSize];
 }
 
-+(NSString *)KKLaunchAdCachePath{
-    return [KKLaunchAdCache KKLaunchAdCachePath];
++(NSString *)MBLaunchAdCachePath{
+    return [MBLaunchAdCache MBLaunchAdCachePath];
 }
 
 +(NSString *)cacheImageURLString{
-    return [KKLaunchAdCache getCacheImageUrl];
+    return [MBLaunchAdCache getCacheImageUrl];
 }
 
 +(NSString *)cacheVideoURLString{
-    return [KKLaunchAdCache getCacheVideoUrl];
+    return [MBLaunchAdCache getCacheVideoUrl];
 }
 
 #pragma mark - 过期
 /** 请使用removeAndAnimated: */
 +(void)skipAction{
-    [[KKLaunchAd shareLaunchAd] removeAndAnimated:YES];
+    [[MBLaunchAd shareLaunchAd] removeAndAnimated:YES];
 }
 /** 请使用setLaunchSourceType: */
 +(void)setLaunchImagesSource:(LaunchImagesSource)launchImagesSource{
@@ -149,11 +149,11 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 }
 
 #pragma mark - private
-+(KKLaunchAd *)shareLaunchAd{
-    static KKLaunchAd *instance = nil;
++(MBLaunchAd *)shareLaunchAd{
+    static MBLaunchAd *instance = nil;
     static dispatch_once_t oneToken;
     dispatch_once(&oneToken,^{
-        instance = [[KKLaunchAd alloc] init];
+        instance = [[MBLaunchAd alloc] init];
     });
     return instance;
 }
@@ -169,10 +169,10 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
             [self removeOnly];
         }];
-        [[NSNotificationCenter defaultCenter] addObserverForName:KKLaunchAdDetailPageWillShowNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:MBLaunchAdDetailPageWillShowNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
             weakSelf.detailPageShowing = YES;
         }];
-        [[NSNotificationCenter defaultCenter] addObserverForName:KKLaunchAdDetailPageShowFinishNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:MBLaunchAdDetailPageShowFinishNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
             weakSelf.detailPageShowing = NO;
         }];
     }
@@ -181,13 +181,13 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 
 -(void)setupLaunchAdEnterForeground{
     switch (_launchAdType) {
-        case KKLaunchAdTypeImage:{
+        case MBLaunchAdTypeImage:{
             if(!_imageAdConfiguration.showEnterForeground || _detailPageShowing) return;
             [self setupLaunchAd];
             [self setupImageAdForConfiguration:_imageAdConfiguration];
         }
             break;
-        case KKLaunchAdTypeVideo:{
+        case MBLaunchAdTypeVideo:{
             if(!_videoAdConfiguration.showEnterForeground || _detailPageShowing) return;
             [self setupLaunchAd];
             [self setupVideoAdForConfiguration:_videoAdConfiguration];
@@ -200,7 +200,7 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 
 -(void)setupLaunchAd{
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    window.rootViewController = [KKLaunchAdController new];
+    window.rootViewController = [MBLaunchAdController new];
     window.rootViewController.view.backgroundColor = [UIColor clearColor];
     window.rootViewController.view.userInteractionEnabled = NO;
     window.windowLevel = UIWindowLevelStatusBar + 1;
@@ -208,47 +208,47 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     window.alpha = 1;
     _window = window;
     /** 添加launchImageView */
-    [_window addSubview:[[KKLaunchImageView alloc] initWithSourceType:_sourceType]];
+    [_window addSubview:[[MBLaunchImageView alloc] initWithSourceType:_sourceType]];
 }
 
 /**图片*/
--(void)setupImageAdForConfiguration:(KKLaunchImageAdConfiguration *)configuration{
+-(void)setupImageAdForConfiguration:(MBLaunchImageAdConfiguration *)configuration{
     if(_window == nil) return;
     [self removeSubViewsExceptLaunchAdImageView];
-    KKLaunchAdImageView *adImageView = [[KKLaunchAdImageView alloc] init];
+    MBLaunchAdImageView *adImageView = [[MBLaunchAdImageView alloc] init];
     [_window addSubview:adImageView];
     /** frame */
     if(configuration.frame.size.width>0 && configuration.frame.size.height>0) adImageView.frame = configuration.frame;
     if(configuration.contentMode) adImageView.contentMode = configuration.contentMode;
     /** webImage */
     if(configuration.imageNameOrURLString.length && XHISURLString(configuration.imageNameOrURLString)){
-        [KKLaunchAdCache async_saveImageUrl:configuration.imageNameOrURLString];
+        [MBLaunchAdCache async_saveImageUrl:configuration.imageNameOrURLString];
         /** 自设图片 */
-        if ([self.delegate respondsToSelector:@selector(KKLaunchAd:launchAdImageView:URL:)]) {
-            [self.delegate KKLaunchAd:self launchAdImageView:adImageView URL:[NSURL URLWithString:configuration.imageNameOrURLString]];
+        if ([self.delegate respondsToSelector:@selector(MBLaunchAd:launchAdImageView:URL:)]) {
+            [self.delegate MBLaunchAd:self launchAdImageView:adImageView URL:[NSURL URLWithString:configuration.imageNameOrURLString]];
         }else{
-            if(!configuration.imageOption) configuration.imageOption = KKLaunchAdImageDefault;
+            if(!configuration.imageOption) configuration.imageOption = MBLaunchAdImageDefault;
             XHWeakSelf
             [adImageView xh_setImageWithURL:[NSURL URLWithString:configuration.imageNameOrURLString] placeholderImage:nil GIFImageCycleOnce:configuration.GIFImageCycleOnce options:configuration.imageOption GIFImageCycleOnceFinish:^{
                 //GIF不循环,播放完成
-                [[NSNotificationCenter defaultCenter] postNotificationName:KKLaunchAdGIFImageCycleOnceFinishNotification object:nil userInfo:@{@"imageNameOrURLString":configuration.imageNameOrURLString}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MBLaunchAdGIFImageCycleOnceFinishNotification object:nil userInfo:@{@"imageNameOrURLString":configuration.imageNameOrURLString}];
                 
             } completed:^(UIImage *image,NSData *imageData,NSError *error,NSURL *url){
                 if(!error){
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-                    if ([weakSelf.delegate respondsToSelector:@selector(KKLaunchAd:imageDownLoadFinish:)]) {
-                        [weakSelf.delegate KKLaunchAd:self imageDownLoadFinish:image];
+                    if ([weakSelf.delegate respondsToSelector:@selector(MBLaunchAd:imageDownLoadFinish:)]) {
+                        [weakSelf.delegate MBLaunchAd:self imageDownLoadFinish:image];
                     }
 #pragma clang diagnostic pop
-                    if ([weakSelf.delegate respondsToSelector:@selector(KKLaunchAd:imageDownLoadFinish:imageData:)]) {
-                        [weakSelf.delegate KKLaunchAd:self imageDownLoadFinish:image imageData:imageData];
+                    if ([weakSelf.delegate respondsToSelector:@selector(MBLaunchAd:imageDownLoadFinish:imageData:)]) {
+                        [weakSelf.delegate MBLaunchAd:self imageDownLoadFinish:image imageData:imageData];
                     }
                 }
             }];
-            if(configuration.imageOption == KKLaunchAdImageCacheInBackground){
+            if(configuration.imageOption == MBLaunchAdImageCacheInBackground){
                 /** 缓存中未有 */
-                if(![KKLaunchAdCache checkImageInCacheWithURL:[NSURL URLWithString:configuration.imageNameOrURLString]]){
+                if(![MBLaunchAdCache checkImageInCacheWithURL:[NSURL URLWithString:configuration.imageNameOrURLString]]){
                     [self removeAndAnimateDefault]; return; /** 完成显示 */
                 }
             }
@@ -264,8 +264,8 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
                 adImageView.loopCompletionBlock = ^(NSUInteger loopCountRemaining) {
                     if(configuration.GIFImageCycleOnce){
                         [w_adImageView stopAnimating];
-                        KKLaunchAdLog(@"GIF不循环,播放完成");
-                        [[NSNotificationCenter defaultCenter] postNotificationName:KKLaunchAdGIFImageCycleOnceFinishNotification object:@{@"imageNameOrURLString":configuration.imageNameOrURLString}];
+                        MBLaunchAdLog(@"GIF不循环,播放完成");
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MBLaunchAdGIFImageCycleOnceFinishNotification object:@{@"imageNameOrURLString":configuration.imageNameOrURLString}];
                     }
                 };
             }else{
@@ -274,12 +274,12 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
             }
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-            if ([self.delegate respondsToSelector:@selector(KKLaunchAd:imageDownLoadFinish:)]) {
-                [self.delegate KKLaunchAd:self imageDownLoadFinish:[UIImage imageWithData:data]];
+            if ([self.delegate respondsToSelector:@selector(MBLaunchAd:imageDownLoadFinish:)]) {
+                [self.delegate MBLaunchAd:self imageDownLoadFinish:[UIImage imageWithData:data]];
             }
 #pragma clang diagnostic pop
         }else{
-            KKLaunchAdLog(@"未设置广告图片");
+            MBLaunchAdLog(@"未设置广告图片");
         }
     }
     /** skipButton */
@@ -293,14 +293,14 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     };
 }
 
--(void)addSkipButtonForConfiguration:(KKLaunchAdConfiguration *)configuration{
+-(void)addSkipButtonForConfiguration:(MBLaunchAdConfiguration *)configuration{
     if(!configuration.duration) configuration.duration = 5;
     if(!configuration.skipButtonType) configuration.skipButtonType = SkipTypeTimeText;
     if(configuration.customSkipView){
         [_window addSubview:configuration.customSkipView];
     }else{
         if(_skipButton == nil){
-            _skipButton = [[KKLaunchAdButton alloc] initWithSkipType:configuration.skipButtonType];
+            _skipButton = [[MBLaunchAdButton alloc] initWithSkipType:configuration.skipButtonType];
             _skipButton.hidden = YES;
             [_skipButton addTarget:self action:@selector(skipButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -310,11 +310,11 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 }
 
 /**视频*/
--(void)setupVideoAdForConfiguration:(KKLaunchVideoAdConfiguration *)configuration{
+-(void)setupVideoAdForConfiguration:(MBLaunchVideoAdConfiguration *)configuration{
     if(_window ==nil) return;
     [self removeSubViewsExceptLaunchAdImageView];
     if(!_adVideoView){
-        _adVideoView = [[KKLaunchAdVideoView alloc] init];
+        _adVideoView = [[MBLaunchAdVideoView alloc] init];
     }
     [_window addSubview:_adVideoView];
     /** frame */
@@ -327,31 +327,31 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     _adVideoView.videoCycleOnce = configuration.videoCycleOnce;
     if(configuration.videoCycleOnce){
         [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-            KKLaunchAdLog(@"video不循环,播放完成");
-            [[NSNotificationCenter defaultCenter] postNotificationName:KKLaunchAdVideoCycleOnceFinishNotification object:nil userInfo:@{@"videoNameOrURLString":configuration.videoNameOrURLString}];
+            MBLaunchAdLog(@"video不循环,播放完成");
+            [[NSNotificationCenter defaultCenter] postNotificationName:MBLaunchAdVideoCycleOnceFinishNotification object:nil userInfo:@{@"videoNameOrURLString":configuration.videoNameOrURLString}];
         }];
     }
     /** video 数据源 */
     if(configuration.videoNameOrURLString.length && XHISURLString(configuration.videoNameOrURLString)){
-        [KKLaunchAdCache async_saveVideoUrl:configuration.videoNameOrURLString];
-        NSURL *pathURL = [KKLaunchAdCache getCacheVideoWithURL:[NSURL URLWithString:configuration.videoNameOrURLString]];
+        [MBLaunchAdCache async_saveVideoUrl:configuration.videoNameOrURLString];
+        NSURL *pathURL = [MBLaunchAdCache getCacheVideoWithURL:[NSURL URLWithString:configuration.videoNameOrURLString]];
         if(pathURL){
-            if ([self.delegate respondsToSelector:@selector(KKLaunchAd:videoDownLoadFinish:)]) {
-                [self.delegate KKLaunchAd:self videoDownLoadFinish:pathURL];
+            if ([self.delegate respondsToSelector:@selector(MBLaunchAd:videoDownLoadFinish:)]) {
+                [self.delegate MBLaunchAd:self videoDownLoadFinish:pathURL];
             }
             _adVideoView.contentURL = pathURL;
             _adVideoView.muted = configuration.muted;
             [_adVideoView.videoPlayer.player play];
         }else{
             XHWeakSelf
-            [[KKLaunchAdDownloader sharedDownloader] downloadVideoWithURL:[NSURL URLWithString:configuration.videoNameOrURLString] progress:^(unsigned long long total, unsigned long long current) {
-                if ([weakSelf.delegate respondsToSelector:@selector(KKLaunchAd:videoDownLoadProgress:total:current:)]) {
-                    [weakSelf.delegate KKLaunchAd:self videoDownLoadProgress:current/(float)total total:total current:current];
+            [[MBLaunchAdDownloader sharedDownloader] downloadVideoWithURL:[NSURL URLWithString:configuration.videoNameOrURLString] progress:^(unsigned long long total, unsigned long long current) {
+                if ([weakSelf.delegate respondsToSelector:@selector(MBLaunchAd:videoDownLoadProgress:total:current:)]) {
+                    [weakSelf.delegate MBLaunchAd:self videoDownLoadProgress:current/(float)total total:total current:current];
                 }
             }  completed:^(NSURL * _Nullable location, NSError * _Nullable error){
                 if(!error){
-                    if ([weakSelf.delegate respondsToSelector:@selector(KKLaunchAd:videoDownLoadFinish:)]){
-                        [weakSelf.delegate KKLaunchAd:self videoDownLoadFinish:location];
+                    if ([weakSelf.delegate respondsToSelector:@selector(MBLaunchAd:videoDownLoadFinish:)]){
+                        [weakSelf.delegate MBLaunchAd:self videoDownLoadFinish:location];
                     }
                 }
             }];
@@ -361,9 +361,9 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     }else{
         if(configuration.videoNameOrURLString.length){
             NSURL *pathURL = nil;
-            NSURL *cachePathURL = [[NSURL alloc] initFileURLWithPath:[KKLaunchAdCache videoPathWithFileName:configuration.videoNameOrURLString]];
+            NSURL *cachePathURL = [[NSURL alloc] initFileURLWithPath:[MBLaunchAdCache videoPathWithFileName:configuration.videoNameOrURLString]];
             //若本地视频未在沙盒缓存文件夹中
-            if (![KKLaunchAdCache checkVideoInCacheWithFileName:configuration.videoNameOrURLString]) {
+            if (![MBLaunchAdCache checkVideoInCacheWithFileName:configuration.videoNameOrURLString]) {
                 /***如果不在沙盒文件夹中则将其复制一份到沙盒缓存文件夹中/下次直接取缓存文件夹文件,加快文件查找速度 */
                 NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:configuration.videoNameOrURLString withExtension:nil];
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -375,18 +375,18 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
             }
             
             if(pathURL){
-                if ([self.delegate respondsToSelector:@selector(KKLaunchAd:videoDownLoadFinish:)]) {
-                    [self.delegate KKLaunchAd:self videoDownLoadFinish:pathURL];
+                if ([self.delegate respondsToSelector:@selector(MBLaunchAd:videoDownLoadFinish:)]) {
+                    [self.delegate MBLaunchAd:self videoDownLoadFinish:pathURL];
                 }
                 _adVideoView.contentURL = pathURL;
                 _adVideoView.muted = configuration.muted;
                 [_adVideoView.videoPlayer.player play];
                 
             }else{
-                KKLaunchAdLog(@"Error:广告视频未找到,请检查名称是否有误!");
+                MBLaunchAdLog(@"Error:广告视频未找到,请检查名称是否有误!");
             }
         }else{
-            KKLaunchAdLog(@"未设置广告视频");
+            MBLaunchAdLog(@"未设置广告视频");
         }
     }
     /** skipButton */
@@ -408,15 +408,15 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 }
 
 #pragma mark - set
--(void)setImageAdConfiguration:(KKLaunchImageAdConfiguration *)imageAdConfiguration{
+-(void)setImageAdConfiguration:(MBLaunchImageAdConfiguration *)imageAdConfiguration{
     _imageAdConfiguration = imageAdConfiguration;
-    _launchAdType = KKLaunchAdTypeImage;
+    _launchAdType = MBLaunchAdTypeImage;
     [self setupImageAdForConfiguration:imageAdConfiguration];
 }
 
--(void)setVideoAdConfiguration:(KKLaunchVideoAdConfiguration *)videoAdConfiguration{
+-(void)setVideoAdConfiguration:(MBLaunchVideoAdConfiguration *)videoAdConfiguration{
     _videoAdConfiguration = videoAdConfiguration;
-    _launchAdType = KKLaunchAdTypeVideo;
+    _launchAdType = MBLaunchAdTypeVideo;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(CGFLOAT_MIN * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self setupVideoAdForConfiguration:videoAdConfiguration];
     });
@@ -429,9 +429,9 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 }
 
 #pragma mark - Action
--(void)skipButtonClick:(KKLaunchAdButton *)button{
-    if ([self.delegate respondsToSelector:@selector(KKLaunchAd:clickSkipButton:)]) {
-        [self.delegate KKLaunchAd:self clickSkipButton:button];
+-(void)skipButtonClick:(MBLaunchAdButton *)button{
+    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickSkipButton:)]) {
+        [self.delegate MBLaunchAd:self clickSkipButton:button];
     }
     [self removeAndAnimated:YES];
 }
@@ -446,35 +446,35 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 
 -(void)clickAndPoint:(CGPoint)point{
     self.clickPoint = point;
-    KKLaunchAdConfiguration * configuration = [self commonConfiguration];
+    MBLaunchAdConfiguration * configuration = [self commonConfiguration];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(KKLaunchAd:clickAndOpenURLString:)]) {
-        [self.delegate KKLaunchAd:self clickAndOpenURLString:configuration.openURLString];
+    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickAndOpenURLString:)]) {
+        [self.delegate MBLaunchAd:self clickAndOpenURLString:configuration.openURLString];
         [self removeAndAnimateDefault];
     }
-    if ([self.delegate respondsToSelector:@selector(KKLaunchAd:clickAndOpenURLString:clickPoint:)]) {
-        [self.delegate KKLaunchAd:self clickAndOpenURLString:configuration.openURLString clickPoint:point];
+    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickAndOpenURLString:clickPoint:)]) {
+        [self.delegate MBLaunchAd:self clickAndOpenURLString:configuration.openURLString clickPoint:point];
         [self removeAndAnimateDefault];
     }
-    if ([self.delegate respondsToSelector:@selector(KKLaunchAd:clickAndOpenModel:clickPoint:)]) {
-        [self.delegate KKLaunchAd:self clickAndOpenModel:configuration.openModel clickPoint:point];
+    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickAndOpenModel:clickPoint:)]) {
+        [self.delegate MBLaunchAd:self clickAndOpenModel:configuration.openModel clickPoint:point];
         [self removeAndAnimateDefault];
     }
 #pragma clang diagnostic pop
-    if ([self.delegate respondsToSelector:@selector(KKLaunchAd:clickAtOpenModel:clickPoint:)]) {
-        BOOL status =  [self.delegate KKLaunchAd:self clickAtOpenModel:configuration.openModel clickPoint:point];
+    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickAtOpenModel:clickPoint:)]) {
+        BOOL status =  [self.delegate MBLaunchAd:self clickAtOpenModel:configuration.openModel clickPoint:point];
         if(status) [self removeAndAnimateDefault];
     }
 }
 
--(KKLaunchAdConfiguration *)commonConfiguration{
-    KKLaunchAdConfiguration *configuration = nil;
+-(MBLaunchAdConfiguration *)commonConfiguration{
+    MBLaunchAdConfiguration *configuration = nil;
     switch (_launchAdType) {
-        case KKLaunchAdTypeVideo:
+        case MBLaunchAdTypeVideo:
             configuration = _videoAdConfiguration;
             break;
-        case KKLaunchAdTypeImage:
+        case MBLaunchAdTypeImage:
             configuration = _imageAdConfiguration;
             break;
         default:
@@ -488,13 +488,15 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     if(_waitDataDuration) duration = _waitDataDuration;
     _waitDataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
     NSTimeInterval period = 1.0;
+    __weak typeof(self) weakSelf = self;
     dispatch_source_set_timer(_waitDataTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(_waitDataTimer, ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if(duration==0){
-            DISPATCH_SOURCE_CANCEL_SAFE(_waitDataTimer);
+            DISPATCH_SOURCE_CANCEL_SAFE(strongSelf.waitDataTimer);
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:KKLaunchAdWaitDataDurationArriveNotification object:nil];
-                [self remove];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MBLaunchAdWaitDataDurationArriveNotification object:nil];
+                [strongSelf remove];
                 return ;
             });
         }
@@ -504,7 +506,7 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 }
 
 -(void)startSkipDispathTimer{
-    KKLaunchAdConfiguration * configuration = [self commonConfiguration];
+    MBLaunchAdConfiguration * configuration = [self commonConfiguration];
     DISPATCH_SOURCE_CANCEL_SAFE(_waitDataTimer);
     if(!configuration.skipButtonType) configuration.skipButtonType = SkipTypeTimeText;//默认
     __block NSInteger duration = 5;//默认
@@ -513,19 +515,36 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
         [_skipButton startRoundDispathTimerWithDuration:duration];
     }
     NSTimeInterval period = 1.0;
+    __weak typeof(self) weakSelf = self;
     _skipTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
     dispatch_source_set_timer(_skipTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(_skipTimer, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            if ([self.delegate respondsToSelector:@selector(KKLaunchAd:customSkipView:duration:)]) {
-                [self.delegate KKLaunchAd:self customSkipView:configuration.customSkipView duration:duration];
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+
+            if ([strongSelf.delegate respondsToSelector:@selector(MBLaunchAd:customSkipView:duration:)]) {
+                [strongSelf.delegate MBLaunchAd:strongSelf customSkipView:configuration.customSkipView duration:duration];
             }
             if(!configuration.customSkipView){
-                [_skipButton setTitleWithSkipType:configuration.skipButtonType duration:duration];
+                [strongSelf.skipButton setTitleWithSkipType:configuration.skipButtonType duration:duration];
             }
             if(duration==0){
-                DISPATCH_SOURCE_CANCEL_SAFE(_skipTimer);
-                [self removeAndAnimate]; return ;
+                DISPATCH_SOURCE_CANCEL_SAFE(strongSelf.skipTimer);
+                if (configuration.autoDismiss) {
+                    [strongSelf removeAndAnimate];
+                } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wdeprecated-declarations"
+                    if ([strongSelf.delegate respondsToSelector:@selector(MBLaunchShowFinish:)]) {
+                        [strongSelf.delegate MBLaunchShowFinish:strongSelf];
+                    }
+#pragma clang diagnostic pop
+                    if ([strongSelf.delegate respondsToSelector:@selector(MBLaunchAdShowFinish:)]) {
+                        [strongSelf.delegate MBLaunchAdShowFinish:strongSelf];
+                    }
+                }
+                
+                return ;
             }
             duration--;
         });
@@ -535,7 +554,7 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 
 -(void)removeAndAnimate{
     
-    KKLaunchAdConfiguration * configuration = [self commonConfiguration];
+    MBLaunchAdConfiguration * configuration = [self commonConfiguration];
     CGFloat duration = showFinishAnimateTimeDefault;
     if(configuration.showFinishAnimateTime>0) duration = configuration.showFinishAnimateTime;
     switch (configuration.showFinishAnimate) {
@@ -548,33 +567,43 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
         }
             break;
         case ShowFinishAnimateLite:{
+            __weak typeof(self) weakSelf = self;
             [UIView transitionWithView:_window duration:duration options:UIViewAnimationOptionCurveEaseOut animations:^{
-                _window.transform = CGAffineTransformMakeScale(1.5, 1.5);
-                _window.alpha = 0;
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                strongSelf.window.transform = CGAffineTransformMakeScale(1.5, 1.5);
+                strongSelf.window.alpha = 0;
             } completion:^(BOOL finished) {
                 [self remove];
             }];
         }
             break;
         case ShowFinishAnimateFlipFromLeft:{
+            __weak typeof(self) weakSelf = self;
             [UIView transitionWithView:_window duration:duration options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-                _window.alpha = 0;
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+
+                strongSelf.window.alpha = 0;
             } completion:^(BOOL finished) {
                 [self remove];
             }];
         }
             break;
         case ShowFinishAnimateFlipFromBottom:{
+            __weak typeof(self) weakSelf = self;
             [UIView transitionWithView:_window duration:duration options:UIViewAnimationOptionTransitionFlipFromBottom animations:^{
-                _window.alpha = 0;
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+
+                strongSelf.window.alpha = 0;
             } completion:^(BOOL finished) {
                 [self remove];
             }];
         }
             break;
         case ShowFinishAnimateCurlUp:{
+            __weak typeof(self) weakSelf = self;
             [UIView transitionWithView:_window duration:duration options:UIViewAnimationOptionTransitionCurlUp animations:^{
-                _window.alpha = 0;
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                strongSelf.window.alpha = 0;
             } completion:^(BOOL finished) {
                 [self remove];
             }];
@@ -588,20 +617,23 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 }
 
 -(void)removeAndAnimateDefault{
-    KKLaunchAdConfiguration * configuration = [self commonConfiguration];
+    MBLaunchAdConfiguration * configuration = [self commonConfiguration];
     CGFloat duration = showFinishAnimateTimeDefault;
     if(configuration.showFinishAnimateTime>0) duration = configuration.showFinishAnimateTime;
+    __weak typeof(self) weakSelf = self;
     [UIView transitionWithView:_window duration:duration options:UIViewAnimationOptionTransitionNone animations:^{
-        _window.alpha = 0;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strongSelf.window.alpha = 0;
     } completion:^(BOOL finished) {
-        [self remove];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf remove];
     }];
 }
 -(void)removeOnly{
     DISPATCH_SOURCE_CANCEL_SAFE(_waitDataTimer)
     DISPATCH_SOURCE_CANCEL_SAFE(_skipTimer)
     REMOVE_FROM_SUPERVIEW_SAFE(_skipButton)
-    if(_launchAdType==KKLaunchAdTypeVideo){
+    if(_launchAdType==MBLaunchAdTypeVideo){
         if(_adVideoView){
             [_adVideoView stopVideoPlayer];
             REMOVE_FROM_SUPERVIEW_SAFE(_adVideoView)
@@ -620,18 +652,18 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     [self removeOnly];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(KKLaunchShowFinish:)]) {
-        [self.delegate KKLaunchShowFinish:self];
+    if ([self.delegate respondsToSelector:@selector(MBLaunchShowFinish:)]) {
+        [self.delegate MBLaunchShowFinish:self];
     }
 #pragma clang diagnostic pop
-    if ([self.delegate respondsToSelector:@selector(KKLaunchAdShowFinish:)]) {
-        [self.delegate KKLaunchAdShowFinish:self];
+    if ([self.delegate respondsToSelector:@selector(MBLaunchAdShowFinish:)]) {
+        [self.delegate MBLaunchAdShowFinish:self];
     }
 }
 
 -(void)removeSubViewsExceptLaunchAdImageView{
     [_window.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(![obj isKindOfClass:[KKLaunchImageView class]]){
+        if(![obj isKindOfClass:[MBLaunchImageView class]]){
             REMOVE_FROM_SUPERVIEW_SAFE(obj)
         }
     }];

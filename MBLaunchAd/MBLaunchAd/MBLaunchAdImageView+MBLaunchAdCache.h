@@ -1,9 +1,9 @@
 
 
-#import "KKLaunchAdView.h"
-#import "KKLaunchAdImageManager.h"
+#import "MBLaunchAdView.h"
+#import "MBLaunchAdImageManager.h"
 
-@interface KKLaunchAdImageView (KKLaunchAdCache)
+@interface MBLaunchAdImageView (MBLaunchAdCache)
 
 /**
  设置url图片
@@ -25,9 +25,9 @@
 
  @param url 图片url
  @param placeholder 占位图
- @param options KKLaunchAdImageOptions
+ @param options MBLaunchAdImageOptions
  */
-- (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(KKLaunchAdImageOptions)options;
+- (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(MBLaunchAdImageOptions)options;
 
 /**
  设置url图片
@@ -52,10 +52,10 @@
 
  @param url 图片url
  @param placeholder 占位图
- @param options KKLaunchAdImageOptions
+ @param options MBLaunchAdImageOptions
  @param completedBlock XHExternalCompletionBlock
  */
-- (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(KKLaunchAdImageOptions)options completed:(nullable XHExternalCompletionBlock)completedBlock;
+- (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(MBLaunchAdImageOptions)options completed:(nullable XHExternalCompletionBlock)completedBlock;
 
 /**
  设置url图片
@@ -63,10 +63,10 @@
  @param url 图片url
  @param placeholder 占位图
  @param GIFImageCycleOnce gif是否只循环播放一次
- @param options KKLaunchAdImageOptions
+ @param options MBLaunchAdImageOptions
  @param GIFImageCycleOnceFinish gif播放完回调(GIFImageCycleOnce = YES 有效)
  @param completedBlock XHExternalCompletionBlock
  */
-- (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder GIFImageCycleOnce:(BOOL)GIFImageCycleOnce options:(KKLaunchAdImageOptions)options GIFImageCycleOnceFinish:(void(^_Nullable)(void))cycleOnceFinishBlock completed:(nullable XHExternalCompletionBlock)completedBlock ;
+- (void)xh_setImageWithURL:(nonnull NSURL *)url placeholderImage:(nullable UIImage *)placeholder GIFImageCycleOnce:(BOOL)GIFImageCycleOnce options:(MBLaunchAdImageOptions)options GIFImageCycleOnceFinish:(void(^_Nullable)(void))cycleOnceFinishBlock completed:(nullable XHExternalCompletionBlock)completedBlock ;
 
 @end

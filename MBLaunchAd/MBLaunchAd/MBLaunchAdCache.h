@@ -7,7 +7,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^SaveCompletionBlock)(BOOL result , NSURL * URL);
 
-@interface KKLaunchAdCache : NSObject
+@interface MBLaunchAdCache : NSObject
 
 #pragma mark - 图片
 /**
@@ -144,10 +144,10 @@ typedef void(^SaveCompletionBlock)(BOOL result , NSURL * URL);
 /**
  *  缓存路径
  */
-+ (NSString *)KKLaunchAdCachePath;
++ (NSString *)MBLaunchAdCachePath;
 
 /**
- *  清除KKLaunchAd本地所有缓存(异步)
+ *  清除MBLaunchAd本地所有缓存(异步)
  */
 +(void)clearDiskCache;
 
@@ -180,7 +180,7 @@ typedef void(^SaveCompletionBlock)(BOOL result , NSURL * URL);
 +(void)clearDiskCacheExceptVideoUrlArray:(NSArray<NSURL *> *)exceptVideoUrlArray;
 
 /**
- *  获取KKLaunch本地缓存大小(M)
+ *  获取MBLaunch本地缓存大小(M)
  */
 +(float)diskCacheSize;
 

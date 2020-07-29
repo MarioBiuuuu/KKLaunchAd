@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger,LaunchImagesSource){
     LaunchImagesSourceLaunchScreen = 2,
 };
 
-@interface KKLaunchImageView : UIImageView
+@interface MBLaunchImageView : UIImageView
 
 - (instancetype)initWithSourceType:(SourceType)sourceType;
 

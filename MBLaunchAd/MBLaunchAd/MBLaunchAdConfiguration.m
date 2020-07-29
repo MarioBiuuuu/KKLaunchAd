@@ -1,18 +1,18 @@
 
 
-#import "KKLaunchAdConfiguration.h"
+#import "MBLaunchAdConfiguration.h"
 
 #pragma mark - 公共
-@implementation KKLaunchAdConfiguration
+@implementation MBLaunchAdConfiguration
 
 @end
 
 #pragma mark - 图片广告相关
-@implementation KKLaunchImageAdConfiguration
+@implementation MBLaunchImageAdConfiguration
 
-+(KKLaunchImageAdConfiguration *)defaultConfiguration{
++(MBLaunchImageAdConfiguration *)defaultConfiguration{
     //配置广告数据
-    KKLaunchImageAdConfiguration *configuration = [KKLaunchImageAdConfiguration new];
+    MBLaunchImageAdConfiguration *configuration = [MBLaunchImageAdConfiguration new];
     //广告停留时间
     configuration.duration = 5;
     //广告frame
@@ -20,7 +20,7 @@
     //设置GIF动图是否只循环播放一次(仅对动图设置有效)
     configuration.GIFImageCycleOnce = NO;
     //缓存机制
-    configuration.imageOption = KKLaunchAdImageDefault;
+    configuration.imageOption = MBLaunchAdImageDefault;
     //图片填充模式
     configuration.contentMode = UIViewContentModeScaleToFill;
     //广告显示完成动画
@@ -37,10 +37,10 @@
 @end
 
 #pragma mark - 视频广告相关
-@implementation KKLaunchVideoAdConfiguration
-+(KKLaunchVideoAdConfiguration *)defaultConfiguration{
+@implementation MBLaunchVideoAdConfiguration
++(MBLaunchVideoAdConfiguration *)defaultConfiguration{
     //配置广告数据
-    KKLaunchVideoAdConfiguration *configuration = [KKLaunchVideoAdConfiguration new];
+    MBLaunchVideoAdConfiguration *configuration = [MBLaunchVideoAdConfiguration new];
     //广告停留时间
     configuration.duration = 5;
     //广告frame

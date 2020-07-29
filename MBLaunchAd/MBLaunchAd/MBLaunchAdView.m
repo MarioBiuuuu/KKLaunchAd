@@ -1,16 +1,16 @@
 
 
-#import "KKLaunchAdView.h"
-#import "KKLaunchAdConst.h"
-#import "KKLaunchImageView.h"
+#import "MBLaunchAdView.h"
+#import "MBLaunchAdConst.h"
+#import "MBLaunchImageView.h"
 
 static NSString *const VideoPlayStatus = @"status";
 
-@interface KKLaunchAdImageView ()
+@interface MBLaunchAdImageView ()
 
 @end
 
-@implementation KKLaunchAdImageView
+@implementation MBLaunchAdImageView
 
 - (id)init{
     self = [super init];
@@ -32,11 +32,11 @@ static NSString *const VideoPlayStatus = @"status";
 @end
 
 #pragma mark - videoAdView
-@interface KKLaunchAdVideoView ()<UIGestureRecognizerDelegate>
+@interface MBLaunchAdVideoView ()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) AVPlayerItem *playerItem;
 @end
 
-@implementation KKLaunchAdVideoView
+@implementation MBLaunchAdVideoView
 
 -(void)dealloc{
     [self.playerItem removeObserver:self forKeyPath:VideoPlayStatus];
@@ -90,7 +90,7 @@ static NSString *const VideoPlayStatus = @"status";
     if([keyPath isEqualToString:VideoPlayStatus]){
         NSInteger newStatus = ((NSNumber *)change[@"new"]).integerValue;
         if (newStatus == AVPlayerItemStatusFailed) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:KKLaunchAdVideoPlayFailedNotification object:nil userInfo:@{@"videoNameOrURLString":_contentURL.absoluteString}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MBLaunchAdVideoPlayFailedNotification object:nil userInfo:@{@"videoNameOrURLString":_contentURL.absoluteString}];
         }
     }
 }

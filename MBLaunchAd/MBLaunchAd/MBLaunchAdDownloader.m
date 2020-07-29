@@ -1,8 +1,8 @@
 
 
-#import "KKLaunchAdDownloader.h"
-#import "KKLaunchAdCache.h"
-#import "KKLaunchAdConst.h"
+#import "MBLaunchAdDownloader.h"
+#import "MBLaunchAdCache.h"
+#import "MBLaunchAdConst.h"
 
 #if __has_include(<FLAnimatedImage/FLAnimatedImage.h>)
     #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -10,31 +10,31 @@
     #import "FLAnimatedImage.h"
 #endif
 
-#pragma mark - KKLaunchAdDownload
+#pragma mark - MBLaunchAdDownload
 
-@interface KKLaunchAdDownload()
+@interface MBLaunchAdDownload()
 
 @property (strong, nonatomic) NSURLSession *session;
 @property(strong,nonatomic)NSURLSessionDownloadTask *downloadTask;
 @property (nonatomic, assign) unsigned long long totalLength;
 @property (nonatomic, assign) unsigned long long currentLength;
-@property (nonatomic, copy) KKLaunchAdDownloadProgressBlock progressBlock;
+@property (nonatomic, copy) MBLaunchAdDownloadProgressBlock progressBlock;
 @property (strong, nonatomic) NSURL *url;
 
 @end
-@implementation KKLaunchAdDownload
+@implementation MBLaunchAdDownload
 
 @end
 
-#pragma mark -  KKLaunchAdImageDownload
-@interface KKLaunchAdImageDownload()<NSURLSessionDownloadDelegate,NSURLSessionTaskDelegate>
+#pragma mark -  MBLaunchAdImageDownload
+@interface MBLaunchAdImageDownload()<NSURLSessionDownloadDelegate,NSURLSessionTaskDelegate>
 
-@property (nonatomic, copy ) KKLaunchAdDownloadImageCompletedBlock completedBlock;
+@property (nonatomic, copy ) MBLaunchAdDownloadImageCompletedBlock completedBlock;
 
 @end
-@implementation KKLaunchAdImageDownload
+@implementation MBLaunchAdImageDownload
 
--(nonnull instancetype)initWithURL:(nonnull NSURL *)url delegateQueue:(nonnull NSOperationQueue *)queue progress:(nullable KKLaunchAdDownloadProgressBlock)progressBlock completed:(nullable KKLaunchAdDownloadImageCompletedBlock)completedBlock{
+-(nonnull instancetype)initWithURL:(nonnull NSURL *)url delegateQueue:(nonnull NSOperationQueue *)queue progress:(nullable MBLaunchAdDownloadProgressBlock)progressBlock completed:(nullable MBLaunchAdDownloadImageCompletedBlock)completedBlock{
     self = [super init];
     if (self) {
         self.url = url;
@@ -83,7 +83,7 @@ didFinishDownloadingToURL:(NSURL *)location {
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     if (error){
-        KKLaunchAdLog(@"error = %@",error);
+        MBLaunchAdLog(@"error = %@",error);
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.completedBlock) {
                 self.completedBlock(nil,nil, error);
@@ -106,14 +106,14 @@ didFinishDownloadingToURL:(NSURL *)location {
 
 @end
 
-#pragma makr - KKLaunchAdVideoDownload
-@interface KKLaunchAdVideoDownload()<NSURLSessionDownloadDelegate,NSURLSessionTaskDelegate>
+#pragma makr - MBLaunchAdVideoDownload
+@interface MBLaunchAdVideoDownload()<NSURLSessionDownloadDelegate,NSURLSessionTaskDelegate>
 
-@property (nonatomic, copy ) KKLaunchAdDownloadVideoCompletedBlock completedBlock;
+@property (nonatomic, copy ) MBLaunchAdDownloadVideoCompletedBlock completedBlock;
 @end
-@implementation KKLaunchAdVideoDownload
+@implementation MBLaunchAdVideoDownload
 
--(nonnull instancetype)initWithURL:(nonnull NSURL *)url delegateQueue:(nonnull NSOperationQueue *)queue progress:(nullable KKLaunchAdDownloadProgressBlock)progressBlock completed:(nullable KKLaunchAdDownloadVideoCompletedBlock)completedBlock{
+-(nonnull instancetype)initWithURL:(nonnull NSURL *)url delegateQueue:(nonnull NSOperationQueue *)queue progress:(nullable MBLaunchAdDownloadProgressBlock)progressBlock completed:(nullable MBLaunchAdDownloadVideoCompletedBlock)completedBlock{
     self = [super init];
     if (self) {
         self.url = url;
@@ -135,11 +135,11 @@ didFinishDownloadingToURL:(NSURL *)location {
       downloadTask:(NSURLSessionDownloadTask *)downloadTask
 didFinishDownloadingToURL:(NSURL *)location {
     NSError *error=nil;
-    NSURL *toURL = [NSURL fileURLWithPath:[KKLaunchAdCache videoPathWithURL:self.url]];
+    NSURL *toURL = [NSURL fileURLWithPath:[MBLaunchAdCache videoPathWithURL:self.url]];
 
     [[NSFileManager defaultManager] copyItemAtURL:location toURL:toURL error:&error];//复制到缓存目录
 
-    if(error)  KKLaunchAdLog(@"error = %@",error);
+    if(error)  MBLaunchAdLog(@"error = %@",error);
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.completedBlock) {
             if(!error){
@@ -169,7 +169,7 @@ didFinishDownloadingToURL:(NSURL *)location {
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     if (error){
-        KKLaunchAdLog(@"error = %@",error);
+        MBLaunchAdLog(@"error = %@",error);
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.completedBlock) {
                 self.completedBlock(nil, error);
@@ -180,20 +180,20 @@ didFinishDownloadingToURL:(NSURL *)location {
 }
 @end
 
-#pragma mark - KKLaunchAdDownloader
-@interface KKLaunchAdDownloader()<KKLaunchAdDownloadDelegate>
+#pragma mark - MBLaunchAdDownloader
+@interface MBLaunchAdDownloader()<MBLaunchAdDownloadDelegate>
 @property (strong, nonatomic, nonnull) NSOperationQueue *downloadImageQueue;
 @property (strong, nonatomic, nonnull) NSOperationQueue *downloadVideoQueue;
 @property (strong, nonatomic) NSMutableDictionary *allDownloadDict;
 @end
 
-@implementation KKLaunchAdDownloader
+@implementation MBLaunchAdDownloader
 
 +(nonnull instancetype )sharedDownloader{
-    static KKLaunchAdDownloader *instance = nil;
+    static MBLaunchAdDownloader *instance = nil;
     static dispatch_once_t oneToken;
     dispatch_once(&oneToken,^{
-        instance = [[KKLaunchAdDownloader alloc] init];
+        instance = [[MBLaunchAdDownloader alloc] init];
     });
     return instance;
 }
@@ -203,19 +203,19 @@ didFinishDownloadingToURL:(NSURL *)location {
     if (self) {
         _downloadImageQueue = [NSOperationQueue new];
         _downloadImageQueue.maxConcurrentOperationCount = 6;
-        _downloadImageQueue.name = @"com.it7090.KKLaunchAdDownloadImageQueue";
+        _downloadImageQueue.name = @"com.it7090.MBLaunchAdDownloadImageQueue";
         _downloadVideoQueue = [NSOperationQueue new];
         _downloadVideoQueue.maxConcurrentOperationCount = 3;
-        _downloadVideoQueue.name = @"com.it7090.KKLaunchAdDownloadVideoQueue";
-        KKLaunchAdLog(@"KKLaunchAdCachePath:%@",[KKLaunchAdCache KKLaunchAdCachePath]);
+        _downloadVideoQueue.name = @"com.it7090.MBLaunchAdDownloadVideoQueue";
+        MBLaunchAdLog(@"MBLaunchAdCachePath:%@",[MBLaunchAdCache MBLaunchAdCachePath]);
     }
     return self;
 }
 
-- (void)downloadImageWithURL:(nonnull NSURL *)url progress:(nullable KKLaunchAdDownloadProgressBlock)progressBlock completed:(nullable KKLaunchAdDownloadImageCompletedBlock)completedBlock{
+- (void)downloadImageWithURL:(nonnull NSURL *)url progress:(nullable MBLaunchAdDownloadProgressBlock)progressBlock completed:(nullable MBLaunchAdDownloadImageCompletedBlock)completedBlock{
     NSString *key = [self keyWithURL:url];
     if(self.allDownloadDict[key]) return;
-    KKLaunchAdImageDownload * download = [[KKLaunchAdImageDownload alloc] initWithURL:url delegateQueue:_downloadImageQueue progress:progressBlock completed:completedBlock];
+    MBLaunchAdImageDownload * download = [[MBLaunchAdImageDownload alloc] initWithURL:url delegateQueue:_downloadImageQueue progress:progressBlock completed:completedBlock];
     download.delegate = self;
     [self.allDownloadDict setObject:download forKey:key];
 }
@@ -229,7 +229,7 @@ didFinishDownloadingToURL:(NSURL *)location {
         if(error){
             if(completedBlock) completedBlock(NO);
         }else{
-            [KKLaunchAdCache async_saveImageData:data imageURL:url completed:^(BOOL result, NSURL * _Nonnull URL) {
+            [MBLaunchAdCache async_saveImageData:data imageURL:url completed:^(BOOL result, NSURL * _Nonnull URL) {
                 if(completedBlock) completedBlock(result);
             }];
         }
@@ -240,12 +240,12 @@ didFinishDownloadingToURL:(NSURL *)location {
     [self downLoadImageAndCacheWithURLArray:urlArray completed:nil];
 }
 
-- (void)downLoadImageAndCacheWithURLArray:(nonnull NSArray <NSURL *> * )urlArray completed:(nullable KKLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock{
+- (void)downLoadImageAndCacheWithURLArray:(nonnull NSArray <NSURL *> * )urlArray completed:(nullable MBLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock{
     if(urlArray.count==0) return;
     __block NSMutableArray * resultArray = [[NSMutableArray alloc] init];
     dispatch_group_t downLoadGroup = dispatch_group_create();
     [urlArray enumerateObjectsUsingBlock:^(NSURL *url, NSUInteger idx, BOOL *stop) {
-        if(![KKLaunchAdCache checkImageInCacheWithURL:url]){
+        if(![MBLaunchAdCache checkImageInCacheWithURL:url]){
             dispatch_group_enter(downLoadGroup);
             [self downloadImageAndCacheWithURL:url completed:^(BOOL result) {
                 dispatch_group_leave(downLoadGroup);
@@ -260,10 +260,10 @@ didFinishDownloadingToURL:(NSURL *)location {
     });
 }
 
-- (void)downloadVideoWithURL:(nonnull NSURL *)url progress:(nullable KKLaunchAdDownloadProgressBlock)progressBlock completed:(nullable KKLaunchAdDownloadVideoCompletedBlock)completedBlock{
+- (void)downloadVideoWithURL:(nonnull NSURL *)url progress:(nullable MBLaunchAdDownloadProgressBlock)progressBlock completed:(nullable MBLaunchAdDownloadVideoCompletedBlock)completedBlock{
     NSString *key = [self keyWithURL:url];
     if(self.allDownloadDict[key]) return;
-    KKLaunchAdVideoDownload * download = [[KKLaunchAdVideoDownload alloc] initWithURL:url delegateQueue:_downloadVideoQueue progress:progressBlock completed:completedBlock];
+    MBLaunchAdVideoDownload * download = [[MBLaunchAdVideoDownload alloc] initWithURL:url delegateQueue:_downloadVideoQueue progress:progressBlock completed:completedBlock];
     download.delegate = self;
     [self.allDownloadDict setObject:download forKey:key];
 }
@@ -286,12 +286,12 @@ didFinishDownloadingToURL:(NSURL *)location {
     [self downLoadVideoAndCacheWithURLArray:urlArray completed:nil];
 }
 
-- (void)downLoadVideoAndCacheWithURLArray:(nonnull NSArray <NSURL *> * )urlArray completed:(nullable KKLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock{
+- (void)downLoadVideoAndCacheWithURLArray:(nonnull NSArray <NSURL *> * )urlArray completed:(nullable MBLaunchAdBatchDownLoadAndCacheCompletedBlock)completedBlock{
     if(urlArray.count==0) return;
     __block NSMutableArray * resultArray = [[NSMutableArray alloc] init];
     dispatch_group_t downLoadGroup = dispatch_group_create();
     [urlArray enumerateObjectsUsingBlock:^(NSURL *url, NSUInteger idx, BOOL *stop) {
-        if(![KKLaunchAdCache checkVideoInCacheWithURL:url]){
+        if(![MBLaunchAdCache checkVideoInCacheWithURL:url]){
              dispatch_group_enter(downLoadGroup);
             [self downloadVideoAndCacheWithURL:url completed:^(BOOL result) {
                dispatch_group_leave(downLoadGroup);
@@ -318,7 +318,7 @@ didFinishDownloadingToURL:(NSURL *)location {
 }
 
 -(NSString *)keyWithURL:(NSURL *)url{
-    return [KKLaunchAdCache md5String:url.absoluteString];
+    return [MBLaunchAdCache md5String:url.absoluteString];
 }
 
 @end
