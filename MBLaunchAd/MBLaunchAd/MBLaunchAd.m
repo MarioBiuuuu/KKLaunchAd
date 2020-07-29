@@ -224,8 +224,8 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     if(configuration.imageNameOrURLString.length && XHISURLString(configuration.imageNameOrURLString)){
         [MBLaunchAdCache async_saveImageUrl:configuration.imageNameOrURLString];
         /** 自设图片 */
-        if ([self.delegate respondsToSelector:@selector(MBLaunchAd:launchAdImageView:URL:)]) {
-            [self.delegate MBLaunchAd:self launchAdImageView:adImageView URL:[NSURL URLWithString:configuration.imageNameOrURLString]];
+        if ([self.delegate respondsToSelector:@selector(mbLaunchAd:launchAdImageView:URL:)]) {
+            [self.delegate mbLaunchAd:self launchAdImageView:adImageView URL:[NSURL URLWithString:configuration.imageNameOrURLString]];
         }else{
             if(!configuration.imageOption) configuration.imageOption = MBLaunchAdImageDefault;
             XHWeakSelf
@@ -237,12 +237,12 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
                 if(!error){
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-                    if ([weakSelf.delegate respondsToSelector:@selector(MBLaunchAd:imageDownLoadFinish:)]) {
-                        [weakSelf.delegate MBLaunchAd:self imageDownLoadFinish:image];
+                    if ([weakSelf.delegate respondsToSelector:@selector(mbLaunchAd:imageDownLoadFinish:)]) {
+                        [weakSelf.delegate mbLaunchAd:self imageDownLoadFinish:image];
                     }
 #pragma clang diagnostic pop
-                    if ([weakSelf.delegate respondsToSelector:@selector(MBLaunchAd:imageDownLoadFinish:imageData:)]) {
-                        [weakSelf.delegate MBLaunchAd:self imageDownLoadFinish:image imageData:imageData];
+                    if ([weakSelf.delegate respondsToSelector:@selector(mbLaunchAd:imageDownLoadFinish:imageData:)]) {
+                        [weakSelf.delegate mbLaunchAd:self imageDownLoadFinish:image imageData:imageData];
                     }
                 }
             }];
@@ -274,8 +274,8 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
             }
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-            if ([self.delegate respondsToSelector:@selector(MBLaunchAd:imageDownLoadFinish:)]) {
-                [self.delegate MBLaunchAd:self imageDownLoadFinish:[UIImage imageWithData:data]];
+            if ([self.delegate respondsToSelector:@selector(mbLaunchAd:imageDownLoadFinish:)]) {
+                [self.delegate mbLaunchAd:self imageDownLoadFinish:[UIImage imageWithData:data]];
             }
 #pragma clang diagnostic pop
         }else{
@@ -336,8 +336,8 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
         [MBLaunchAdCache async_saveVideoUrl:configuration.videoNameOrURLString];
         NSURL *pathURL = [MBLaunchAdCache getCacheVideoWithURL:[NSURL URLWithString:configuration.videoNameOrURLString]];
         if(pathURL){
-            if ([self.delegate respondsToSelector:@selector(MBLaunchAd:videoDownLoadFinish:)]) {
-                [self.delegate MBLaunchAd:self videoDownLoadFinish:pathURL];
+            if ([self.delegate respondsToSelector:@selector(mbLaunchAd:videoDownLoadFinish:)]) {
+                [self.delegate mbLaunchAd:self videoDownLoadFinish:pathURL];
             }
             _adVideoView.contentURL = pathURL;
             _adVideoView.muted = configuration.muted;
@@ -345,13 +345,13 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
         }else{
             XHWeakSelf
             [[MBLaunchAdDownloader sharedDownloader] downloadVideoWithURL:[NSURL URLWithString:configuration.videoNameOrURLString] progress:^(unsigned long long total, unsigned long long current) {
-                if ([weakSelf.delegate respondsToSelector:@selector(MBLaunchAd:videoDownLoadProgress:total:current:)]) {
-                    [weakSelf.delegate MBLaunchAd:self videoDownLoadProgress:current/(float)total total:total current:current];
+                if ([weakSelf.delegate respondsToSelector:@selector(mbLaunchAd:videoDownLoadProgress:total:current:)]) {
+                    [weakSelf.delegate mbLaunchAd:self videoDownLoadProgress:current/(float)total total:total current:current];
                 }
             }  completed:^(NSURL * _Nullable location, NSError * _Nullable error){
                 if(!error){
-                    if ([weakSelf.delegate respondsToSelector:@selector(MBLaunchAd:videoDownLoadFinish:)]){
-                        [weakSelf.delegate MBLaunchAd:self videoDownLoadFinish:location];
+                    if ([weakSelf.delegate respondsToSelector:@selector(mbLaunchAd:videoDownLoadFinish:)]){
+                        [weakSelf.delegate mbLaunchAd:self videoDownLoadFinish:location];
                     }
                 }
             }];
@@ -375,8 +375,8 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
             }
             
             if(pathURL){
-                if ([self.delegate respondsToSelector:@selector(MBLaunchAd:videoDownLoadFinish:)]) {
-                    [self.delegate MBLaunchAd:self videoDownLoadFinish:pathURL];
+                if ([self.delegate respondsToSelector:@selector(mbLaunchAd:videoDownLoadFinish:)]) {
+                    [self.delegate mbLaunchAd:self videoDownLoadFinish:pathURL];
                 }
                 _adVideoView.contentURL = pathURL;
                 _adVideoView.muted = configuration.muted;
@@ -430,8 +430,8 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 
 #pragma mark - Action
 -(void)skipButtonClick:(MBLaunchAdButton *)button{
-    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickSkipButton:)]) {
-        [self.delegate MBLaunchAd:self clickSkipButton:button];
+    if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickSkipButton:)]) {
+        [self.delegate mbLaunchAd:self clickSkipButton:button];
     }
     [self removeAndAnimated:YES];
 }
@@ -449,21 +449,21 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
     MBLaunchAdConfiguration * configuration = [self commonConfiguration];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickAndOpenURLString:)]) {
-        [self.delegate MBLaunchAd:self clickAndOpenURLString:configuration.openURLString];
+    if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickAndOpenURLString:)]) {
+        [self.delegate mbLaunchAd:self clickAndOpenURLString:configuration.openURLString];
         [self removeAndAnimateDefault];
     }
-    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickAndOpenURLString:clickPoint:)]) {
-        [self.delegate MBLaunchAd:self clickAndOpenURLString:configuration.openURLString clickPoint:point];
+    if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickAndOpenURLString:clickPoint:)]) {
+        [self.delegate mbLaunchAd:self clickAndOpenURLString:configuration.openURLString clickPoint:point];
         [self removeAndAnimateDefault];
     }
-    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickAndOpenModel:clickPoint:)]) {
-        [self.delegate MBLaunchAd:self clickAndOpenModel:configuration.openModel clickPoint:point];
+    if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickAndOpenModel:clickPoint:)]) {
+        [self.delegate mbLaunchAd:self clickAndOpenModel:configuration.openModel clickPoint:point];
         [self removeAndAnimateDefault];
     }
 #pragma clang diagnostic pop
-    if ([self.delegate respondsToSelector:@selector(MBLaunchAd:clickAtOpenModel:clickPoint:)]) {
-        BOOL status =  [self.delegate MBLaunchAd:self clickAtOpenModel:configuration.openModel clickPoint:point];
+    if ([self.delegate respondsToSelector:@selector(mbLaunchAd:clickAtOpenModel:clickPoint:)]) {
+        BOOL status =  [self.delegate mbLaunchAd:self clickAtOpenModel:configuration.openModel clickPoint:point];
         if(status) [self removeAndAnimateDefault];
     }
 }
@@ -522,8 +522,8 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong typeof(weakSelf) strongSelf = weakSelf;
 
-            if ([strongSelf.delegate respondsToSelector:@selector(MBLaunchAd:customSkipView:duration:)]) {
-                [strongSelf.delegate MBLaunchAd:strongSelf customSkipView:configuration.customSkipView duration:duration];
+            if ([strongSelf.delegate respondsToSelector:@selector(mbLaunchAd:customSkipView:duration:)]) {
+                [strongSelf.delegate mbLaunchAd:strongSelf customSkipView:configuration.customSkipView duration:duration];
             }
             if(!configuration.customSkipView){
                 [strongSelf.skipButton setTitleWithSkipType:configuration.skipButtonType duration:duration];
