@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MBLaunchAd'
-  s.version          = '1.2.2'
+  s.version          = '1.2.3'
   s.summary          = 'A short description of KKLaunchAd.'
 
 # This description is used to generate tags and improve search results.
