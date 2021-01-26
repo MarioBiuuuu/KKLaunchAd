@@ -61,6 +61,8 @@ typedef NS_ENUM(NSInteger , ShowFinishAnimate) {
 /** 子视图(若定义此属性,这些视图将会被自动添加在广告视图上,frame相对于window) */
 @property(nonatomic,copy,nullable) NSArray<UIView *> *subViews;
 
+@property(nonatomic, strong) UIImage *appIconImage;
+
 @end
 
 #pragma mark - 图片广告相关
