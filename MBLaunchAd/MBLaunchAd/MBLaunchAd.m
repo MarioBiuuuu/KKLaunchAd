@@ -27,6 +27,8 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 @property(nonatomic,strong)MBLaunchImageAdConfiguration * imageAdConfiguration;
 @property(nonatomic,strong)MBLaunchVideoAdConfiguration * videoAdConfiguration;
 @property(nonatomic,strong)MBLaunchAdButton * skipButton;
+@property(nonatomic,strong)UIView * adFootView;
+
 @property(nonatomic,strong)MBLaunchAdVideoView * adVideoView;
 @property(nonatomic,strong)UIWindow * window;
 @property(nonatomic,copy)dispatch_source_t waitDataTimer;
@@ -275,18 +277,51 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
             MBLaunchAdLog(@"未设置广告图片");
         }
     }
+    if (configuration.appIconImage) {
+        adImageView.frame = CGRectMake(0, 0, configuration.frame.size.width, configuration.frame.size.height * 0.75);
+        [self addADFooterWithConfiguration:configuration];
+    }
     /** skipButton */
     [self addSkipButtonForConfiguration:configuration];
     [self startSkipDispathTimer];
     /** customView */
-    if(configuration.subViews.count>0)  [self addSubViews:configuration.subViews];
+//    if(configuration.subViews.count>0)  [self addSubViews:configuration.subViews];
     XHWeakSelf
     adImageView.click = ^(CGPoint point) {
         [weakSelf clickAndPoint:point];
     };
 }
 
+- (void)addADFooterWithConfiguration:(MBLaunchAdConfiguration *)configuration {
+    if (_adFootView == nil) {
+        CGFloat width = [UIScreen mainScreen].bounds.size.width;
+        CGFloat height = [UIScreen mainScreen].bounds.size.height * 0.25;
+        UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - height, width, height)];
+        footView.backgroundColor = [UIColor whiteColor];
+        
+        UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, height * 43.0 / 200.0, configuration.appIconImage.size.width, configuration.appIconImage.size.height)];
+        iconImageView.center = CGPointMake(width * 0.5, iconImageView.center.y);
+        iconImageView.image = configuration.appIconImage;
+        [footView addSubview:iconImageView];
+        
+        UIView *adView = [[UIView alloc] initWithFrame:CGRectMake(width - 28, -15, 28, 15)];
+        adView.backgroundColor = [UIColor colorWithRed:127.0/255.0 green:127.0/255.0 blue:127.0/255.0 alpha:127.0/255.0];
+        
+        UILabel *adLabel = [[UILabel alloc] initWithFrame:adView.bounds];
+        adLabel.text = @"AD";
+        adLabel.textColor = [UIColor whiteColor];
+        adLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:10];
+        adLabel.textAlignment = NSTextAlignmentCenter;
+        [adView addSubview:adLabel];
+        [footView addSubview:adView];
+        
+        _adFootView = footView;
+    }
+    [_window addSubview:_adFootView];
+}
+
 -(void)addSkipButtonForConfiguration:(MBLaunchAdConfiguration *)configuration{
+    configuration.duration = 10.0;
     if(!configuration.duration) configuration.duration = 5;
     if(!configuration.skipButtonType) configuration.skipButtonType = SkipTypeTimeText;
     if(configuration.customSkipView){
@@ -382,11 +417,12 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
             MBLaunchAdLog(@"未设置广告视频");
         }
     }
+    [self addADFooterWithConfiguration:configuration];
     /** skipButton */
     [self addSkipButtonForConfiguration:configuration];
     [self startSkipDispathTimer];
     /** customView */
-    if(configuration.subViews.count>0) [self addSubViews:configuration.subViews];
+//    if(configuration.subViews.count>0) [self addSubViews:configuration.subViews];
     XHWeakSelf
     _adVideoView.click = ^(CGPoint point) {
         [weakSelf clickAndPoint:point];

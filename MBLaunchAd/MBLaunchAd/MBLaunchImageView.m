@@ -15,7 +15,7 @@
     if (self) {
         self.frame = [UIScreen mainScreen].bounds;
         self.userInteractionEnabled = YES;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor whiteColor];
         switch (sourceType) {
             case SourceTypeLaunchImage:{
                 self.image = [self imageFromLaunchImage];
