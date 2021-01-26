@@ -321,7 +321,6 @@ static  SourceType _sourceType = SourceTypeLaunchImage;
 }
 
 -(void)addSkipButtonForConfiguration:(MBLaunchAdConfiguration *)configuration{
-    configuration.duration = 10.0;
     if(!configuration.duration) configuration.duration = 5;
     if(!configuration.skipButtonType) configuration.skipButtonType = SkipTypeTimeText;
     if(configuration.customSkipView){
